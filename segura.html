@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Segura — Dashboard Cámaras</title><style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;min-height:100vh}
+  .top-bar{background:linear-gradient(135deg,#1a1f2e,#232a3e);padding:18px 32px;
+    display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #2d3550}
+  .logo{font-size:2rem;font-weight:900;letter-spacing:3px}
+  .sublabel{font-size:0.88rem;letter-spacing:1px;font-weight:600;margin-top:2px}
+  .fecha{font-size:0.82rem;color:#8899bb;margin-top:3px}
+  .top-bar h1{font-size:1.2rem;font-weight:700;color:#fff}
+  .summary-bar{display:flex;gap:16px;padding:20px 32px;background:#13172a;
+    border-bottom:1px solid #2d3550;flex-wrap:wrap}
+  .s-card{flex:1;min-width:130px;background:#1a1f2e;border-radius:10px;
+    padding:14px 18px;border-left:4px solid}
+  .s-card .lbl{font-size:0.72rem;color:#8899bb;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+  .s-card .val{font-size:1.7rem;font-weight:800}
+  .s-card .sub{font-size:0.78rem;color:#aab;margin-top:2px}
+  .sem-summary{display:flex;gap:12px;padding:14px 32px 4px;flex-wrap:wrap}
+  .sem-badge{display:flex;align-items:center;gap:8px;background:#1a1f2e;
+    border-radius:8px;padding:9px 16px;font-size:0.83rem;font-weight:600}
+  .dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+  .dot-red{background:#ef4444;box-shadow:0 0 8px #ef444499}
+  .dot-yellow{background:#f59e0b;box-shadow:0 0 8px #f59e0b99}
+  .dot-green{background:#22c55e;box-shadow:0 0 8px #22c55e99}
+  .clients-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));
+    gap:22px;padding:22px 32px 32px}
+  .client-panel{background:#1a1f2e;border-radius:14px;overflow:hidden;border:1px solid #2d3550}
+  .client-header{padding:16px 22px;display:flex;align-items:center;justify-content:space-between}
+  .client-header h2{font-size:1.05rem;font-weight:700;color:#fff}
+  .client-stats{display:flex;gap:10px}
+  .stat-b{display:flex;flex-direction:column;align-items:center;
+    background:rgba(0,0,0,0.3);border-radius:8px;padding:6px 14px}
+  .stat-b .n{font-size:1.25rem;font-weight:800}
+  .stat-b .l{font-size:0.65rem;color:#99aacc;text-transform:uppercase}
+  .pct-bar-wrap{margin:0 22px 14px;background:#0f1117;border-radius:6px;overflow:hidden;height:8px}
+  .pct-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#ef4444,#f59e0b)}
+  .legend{display:flex;gap:16px;padding:4px 22px 12px;font-size:0.72rem;color:#8899bb}
+  .legend-item{display:flex;align-items:center;gap:5px}
+  .areas-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:6px;
+    max-height:540px;overflow-y:auto}
+  .areas-list::-webkit-scrollbar{width:5px}
+  .areas-list::-webkit-scrollbar-track{background:#0f1117}
+  .areas-list::-webkit-scrollbar-thumb{background:#334;border-radius:3px}
+  .area-row{display:flex;align-items:center;gap:10px;background:#131826;
+    border-radius:8px;padding:8px 12px;border:1px solid #222b40}
+  .semaforo{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+  .sem-green{background:#22c55e;box-shadow:0 0 7px #22c55e88}
+  .sem-yellow{background:#f59e0b;box-shadow:0 0 7px #f59e0b88}
+  .sem-red{background:#ef4444;box-shadow:0 0 7px #ef444488}
+  .area-name{flex:1;font-size:0.8rem;color:#ccd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .area-counts{font-size:0.75rem;color:#8899bb;white-space:nowrap}
+  .area-pct{font-size:0.8rem;font-weight:700;width:44px;text-align:right}
+  .pct-red{color:#ef4444}.pct-yellow{color:#f59e0b}.pct-green{color:#22c55e}
+  .mini-bar{width:65px;background:#0f1117;border-radius:3px;height:5px;flex-shrink:0}
+  .mini-bar .mfill{height:100%;border-radius:3px}
+  .footer{text-align:center;padding:14px;color:#445;font-size:0.75rem}
+</style></head><body>
+<div class="top-bar">
+  <div><div class="logo" style="color:#a855f7">SEGURA</div>
+  <div class="sublabel" style="color:#a855f788">Monitoreo y Vigilancia</div>
+  <div class="fecha">Dashboard de Estado de Cámaras — 27/02/2026</div></div>
+  <h1>Monitor de Disponibilidad</h1>
+</div>
+<div class="summary-bar">
+  <div class="s-card" style="border-color:#a855f7"><div class="lbl">Total Cámaras</div><div class="val" style="color:#a855f7">740</div><div class="sub">68 áreas</div></div>
+  <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">592</div><div class="sub">80.0% disponibles</div></div>
+  <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">148</div><div class="sub">20.0% fuera de línea</div></div>
+    <div class="s-card" style="border-color:#3b1a6e;margin-left:6px"><div class="lbl">Segura</div><div class="val" style="color:#3b1a6e">625</div><div class="sub">137 offline (21.9%)</div></div>
+  <div class="s-card" style="border-color:#6e1a3a;margin-left:6px"><div class="lbl">Segura + Recorridas Kaibil</div><div class="val" style="color:#6e1a3a">115</div><div class="sub">11 offline (9.6%)</div></div>
+
+</div>
+<div class="sem-summary">
+  <div class="sem-badge"><div class="dot dot-red"></div><span style="color:#ef4444">14</span>&nbsp;áreas críticas (&gt;30%)</div>
+  <div class="sem-badge"><div class="dot dot-yellow"></div><span style="color:#f59e0b">18</span>&nbsp;áreas en alerta (10–30%)</div>
+  <div class="sem-badge"><div class="dot dot-green"></div><span style="color:#22c55e">36</span>&nbsp;áreas normales (&lt;10%)</div>
+</div>
+<div class="clients-grid">  <div class="client-panel">
+    <div class="client-header" style="background:linear-gradient(135deg,#3b1a6e,#1a1f2e)">
+      <div>
+        <h2>🟣 SG — Segura</h2>
+        <div style="font-size:0.78rem;color:#8899bb;margin-top:3px">60 áreas · 625 cámaras</div>
+      </div>
+      <div class="client-stats">
+        <div class="stat-b"><span class="n" style="color:#22c55e">488</span><span class="l">Online</span></div>
+        <div class="stat-b"><span class="n" style="color:#ef4444">137</span><span class="l">Offline</span></div>
+        <div class="stat-b"><span class="n" style="color:#f59e0b">21.9%</span><span class="l">Caída</span></div>
+      </div>
+    </div>
+    <div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:21.9%"></div></div>
+    <div class="legend">
+      <div class="legend-item"><div class="semaforo sem-green"></div> &lt;10%</div>
+      <div class="legend-item"><div class="semaforo sem-yellow"></div> 10–30%</div>
+      <div class="legend-item"><div class="semaforo sem-red"></div> &gt;30%</div>
+    </div>
+    <div class="areas-list">      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG2181 - Felipe Spezel">SG2181 - Felipe Spezel</div>
+        <div class="area-counts">2/2 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG3497 - Carlos Ravecca">SG3497 - Carlos Ravecca</div>
+        <div class="area-counts">10/10 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG2273 - Alvaro Banchero">SG2273 - Alvaro Banchero</div>
+        <div class="area-counts">4/4 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG3728 - HADIMER Edif. Bequem">SG3728 - HADIMER Edif. Bequem</div>
+        <div class="area-counts">6/6 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG4057 - Mateo Cardozo">SG4057 - Mateo Cardozo</div>
+        <div class="area-counts">11/11 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG2759 - Abrigo Rural SA">SG2759 - Abrigo Rural SA</div>
+        <div class="area-counts">11/11 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG1485 - Juan Jose Roca">SG1485 - Juan Jose Roca</div>
+        <div class="area-counts">9/9 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG2877 - Ed Motivos de Proteo">SG2877 - Ed Motivos de Proteo</div>
+        <div class="area-counts">18/18 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG3224 - Manuel Echeguia">SG3224 - Manuel Echeguia</div>
+        <div class="area-counts">11/11 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG2618 - Cooperativa 24 de Noviembre">SG2618 - Cooperativa 24 de Noviembre</div>
+        <div class="area-counts">12/12 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG4030 - BALDOMIR SRL.">SG4030 - BALDOMIR SRL.</div>
+        <div class="area-counts">6/6 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG2439 - Gentos Uruguay">SG2439 - Gentos Uruguay</div>
+        <div class="area-counts">2/2 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SG4155 - Maria Fernanda Gomez">SG4155 - Maria Fernanda Gomez</div>
+        <div class="area-counts">2/6 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:33.3%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">33.3%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG1935 - Shellman">SG1935 - Shellman</div>
+        <div class="area-counts">2/8 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:25.0%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">25.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG2241 - Calister">SG2241 - Calister</div>
+        <div class="area-counts">1/4 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:25.0%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">25.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG1125 - Guillermina Vivo Duran">SG1125 - Guillermina Vivo Duran</div>
+        <div class="area-counts">2/8 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:25.0%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">25.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG3364 - OSE Santa Lucia - Taller Almacenes">SG3364 - OSE Santa Lucia - Taller Almacenes</div>
+        <div class="area-counts">3/17 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:17.6%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">17.6%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG2943 - Horizonte Andino SRL">SG2943 - Horizonte Andino SRL</div>
+        <div class="area-counts">2/12 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:16.7%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">16.7%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG1381 - MIRAMOL S.A.">SG1381 - MIRAMOL S.A.</div>
+        <div class="area-counts">1/7 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:14.3%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">14.3%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG3098 - GRABA">SG3098 - GRABA</div>
+        <div class="area-counts">1/7 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:14.3%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">14.3%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG2930 - Macelcor S.A.">SG2930 - Macelcor S.A.</div>
+        <div class="area-counts">1/7 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:14.3%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">14.3%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG4694 - RAUL CLERC S.A. - LICEO 47">SG4694 - RAUL CLERC S.A. - LICEO 47</div>
+        <div class="area-counts">1/7 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:14.3%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">14.3%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG4514 - EDIFICIO LAWA (GOLFIMBER S.A.)">SG4514 - EDIFICIO LAWA (GOLFIMBER S.A.)</div>
+        <div class="area-counts">7/50 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:14.0%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">14.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG4190 - Edificio Madero">SG4190 - Edificio Madero</div>
+        <div class="area-counts">4/30 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:13.3%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">13.3%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG2798 - Edificio La Rinconada">SG2798 - Edificio La Rinconada</div>
+        <div class="area-counts">1/8 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">12.5%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG3291 - LAQ SAS">SG3291 - LAQ SAS</div>
+        <div class="area-counts">1/8 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">12.5%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG2564 - Saint George's School">SG2564 - Saint George's School</div>
+        <div class="area-counts">1/9 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:11.1%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">11.1%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SG2920 - Club Tennis House">SG2920 - Club Tennis House</div>
+        <div class="area-counts">1/9 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:11.1%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">11.1%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2051 - Edificio Terrazas de Jardines">SG2051 - Edificio Terrazas de Jardines</div>
+        <div class="area-counts">1/11 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:9.1%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">9.1%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG4629 - EDIFICIO PATRIA Preciato S.A.">SG4629 - EDIFICIO PATRIA Preciato S.A.</div>
+        <div class="area-counts">1/11 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:9.1%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">9.1%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="MS4658 - AIRES DE PALERMO SAS">MS4658 - AIRES DE PALERMO SAS</div>
+        <div class="area-counts">1/12 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:8.3%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">8.3%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2316 - Lilian Arbiza">SG2316 - Lilian Arbiza</div>
+        <div class="area-counts">1/16 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:6.2%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">6.2%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG4443 - Edificio Austen">SG4443 - Edificio Austen</div>
+        <div class="area-counts">0/5 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG4436 - Club Tabaré">SG4436 - Club Tabaré</div>
+        <div class="area-counts">0/16 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2794 - Edificio Terravista">SG2794 - Edificio Terravista</div>
+        <div class="area-counts">0/5 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG3713 - MINUFLEX S.A.">SG3713 - MINUFLEX S.A.</div>
+        <div class="area-counts">0/16 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2659 - Hernan Kazah">SG2659 - Hernan Kazah</div>
+        <div class="area-counts">0/15 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2568 - Myriham Picorell">SG2568 - Myriham Picorell</div>
+        <div class="area-counts">0/12 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2280 - Joaquin Magallan">SG2280 - Joaquin Magallan</div>
+        <div class="area-counts">0/2 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG3448 - O.S.E. Sauce">SG3448 - O.S.E. Sauce</div>
+        <div class="area-counts">0/4 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG5004 - Gerardo Zambrano & Cia">SG5004 - Gerardo Zambrano & Cia</div>
+        <div class="area-counts">0/6 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG3951 - NIVELEX S.A.">SG3951 - NIVELEX S.A.</div>
+        <div class="area-counts">0/12 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG3774 - Agustin Ciganda">SG3774 - Agustin Ciganda</div>
+        <div class="area-counts">0/6 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG1663 - Lynette Pepper">SG1663 - Lynette Pepper</div>
+        <div class="area-counts">0/8 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG3715 - PINAR UNO S.A.S.">SG3715 - PINAR UNO S.A.S.</div>
+        <div class="area-counts">0/16 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2918 - ANGEL URRABURU">SG2918 - ANGEL URRABURU</div>
+        <div class="area-counts">0/8 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG1102 - Santiago Fernandez">SG1102 - Santiago Fernandez</div>
+        <div class="area-counts">0/6 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG1103 - ANUALIAM S.A.">SG1103 - ANUALIAM S.A.</div>
+        <div class="area-counts">0/16 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2140 - ALTAMA">SG2140 - ALTAMA</div>
+        <div class="area-counts">0/19 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG4631 - Garabir S.A. (Jardines del Prado)">SG4631 - Garabir S.A. (Jardines del Prado)</div>
+        <div class="area-counts">0/22 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2045 - Carlos Zaffaroni">SG2045 - Carlos Zaffaroni</div>
+        <div class="area-counts">0/3 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG3041 - AUTOMOTORES MOTOR HAUS S.A.">SG3041 - AUTOMOTORES MOTOR HAUS S.A.</div>
+        <div class="area-counts">0/17 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG3483 - Ryfisa S.A.">SG3483 - Ryfisa S.A.</div>
+        <div class="area-counts">0/11 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG3904 - Avelina Ivaldi">SG3904 - Avelina Ivaldi</div>
+        <div class="area-counts">0/5 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG4696 - Edificio EMBAT">SG4696 - Edificio EMBAT</div>
+        <div class="area-counts">0/17 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2215 - Juan Manuel Otegui">SG2215 - Juan Manuel Otegui</div>
+        <div class="area-counts">0/8 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG3771 - Sociedad Anestesiologia Uruguay">SG3771 - Sociedad Anestesiologia Uruguay</div>
+        <div class="area-counts">0/8 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG2985 - Villa Favorita SA">SG2985 - Villa Favorita SA</div>
+        <div class="area-counts">0/6 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG1002 - Martin Yaquinta">SG1002 - Martin Yaquinta</div>
+        <div class="area-counts">0/3 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SG1328 - OMAR RIENZI">SG1328 - OMAR RIENZI</div>
+        <div class="area-counts">0/4 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div></div>
+  </div>
+  <div class="client-panel">
+    <div class="client-header" style="background:linear-gradient(135deg,#6e1a3a,#1a1f2e)">
+      <div>
+        <h2>🩷 SR — Segura + Recorridas Kaibil</h2>
+        <div style="font-size:0.78rem;color:#8899bb;margin-top:3px">8 áreas · 115 cámaras</div>
+      </div>
+      <div class="client-stats">
+        <div class="stat-b"><span class="n" style="color:#22c55e">104</span><span class="l">Online</span></div>
+        <div class="stat-b"><span class="n" style="color:#ef4444">11</span><span class="l">Offline</span></div>
+        <div class="stat-b"><span class="n" style="color:#f59e0b">9.6%</span><span class="l">Caída</span></div>
+      </div>
+    </div>
+    <div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:9.6%"></div></div>
+    <div class="legend">
+      <div class="legend-item"><div class="semaforo sem-green"></div> &lt;10%</div>
+      <div class="legend-item"><div class="semaforo sem-yellow"></div> 10–30%</div>
+      <div class="legend-item"><div class="semaforo sem-red"></div> &gt;30%</div>
+    </div>
+    <div class="areas-list">      <div class="area-row">
+        <div class="semaforo sem-red"></div>
+        <div class="area-name" title="SR4004 - Edificio French Houses">SR4004 - Edificio French Houses</div>
+        <div class="area-counts">4/4 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+        <div class="area-pct pct-red">100.0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SR4383 - SATENIL SA">SR4383 - SATENIL SA</div>
+        <div class="area-counts">4/26 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:15.4%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">15.4%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SR3790 - DALSICAR S.A.">SR3790 - DALSICAR S.A.</div>
+        <div class="area-counts">1/8 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">12.5%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-yellow"></div>
+        <div class="area-name" title="SR5090 - Edificio Nervi">SR5090 - Edificio Nervi</div>
+        <div class="area-counts">2/19 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:10.5%;background:#f59e0b"></div></div>
+        <div class="area-pct pct-yellow">10.5%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SR3791 - Edificio Puerto Jardin">SR3791 - Edificio Puerto Jardin</div>
+        <div class="area-counts">0/16 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SR3369 - Cristopher Brown">SR3369 - Cristopher Brown</div>
+        <div class="area-counts">0/10 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SR4616 - COMPLEJO CASAS H">SR4616 - COMPLEJO CASAS H</div>
+        <div class="area-counts">0/22 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div>
+      <div class="area-row">
+        <div class="semaforo sem-green"></div>
+        <div class="area-name" title="SR2699 - Kopel Sanchez">SR2699 - Kopel Sanchez</div>
+        <div class="area-counts">0/10 off</div>
+        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+        <div class="area-pct pct-green">0%</div>
+      </div></div>
+  </div></div>
+<div class="footer">Datos al 27/02/2026 · Reporte automático Hik-Central Professional</div>
+</body></html>
