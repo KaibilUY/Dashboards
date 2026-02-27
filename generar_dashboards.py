@@ -373,7 +373,7 @@ def build_dashboard(titulo, logo_txt, logo_color, sub_label, panels_config, area
 # ─────────────────────────────────────────────
 def subir_github(repo_dir, fecha):
     try:
-        os.chdir(repo_dir)
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
         subprocess.run(['git', 'add', '.'], check=True)
         result = subprocess.run(['git', 'commit', '-m', f'Dashboard {fecha}'],
                                 capture_output=True, text=True)
