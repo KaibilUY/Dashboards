@@ -402,7 +402,7 @@ def main():
     print(f"  Áreas procesadas:  {len(areas)}")
 
     print("\n[3/4] Generando dashboards...")
-    out = CARPETA_REPO
+    out = os.path.dirname(os.path.abspath(__file__))
 
     build_dashboard('Kaibil', 'KAIBIL', '#4a9eff', 'Seguridad Privada',
         [(['KS'], '🔵 KS — Kaibil Abonados', '#1a3a6e'),
