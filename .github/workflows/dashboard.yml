@@ -1,0 +1,39 @@
+name: Actualizar Dashboards
+
+on:
+  schedule:
+    - cron: '15 13 * * 1-5'  # 10:15 Uruguay (UTC-3) = 13:15 UTC, lunes a viernes
+  workflow_dispatch:           # También permite ejecutar manualmente
+
+jobs:
+  generar-dashboards:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: |
+          pip install openpyxl google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
+      - name: Generar dashboards
+        env:
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+        run: python generar_dashboards.py
+
+      - name: Subir cambios a GitHub
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Actions"
+          git add index.html segura.html punta-del-este.html
+          git diff --staged --quiet || git commit -m "Dashboard $(date +'%d/%m/%Y')"
+          git push

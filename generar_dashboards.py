@@ -40,7 +40,7 @@ def classify(area):
 #  LEER EXCEL
 # ─────────────────────────────────────────────
 
-GOOGLE_DRIVE_FOLDER_ID = "1fayZgQE5zRmpo9RchY7Ti0nZKU7qeHmS"
+GOOGLE_DRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", "1fayZgQE5zRmpo9RchY7Ti0nZKU7qeHmS")
 
 def descargar_desde_drive(carpeta_destino):
     """Descarga el Excel más reciente desde Google Drive"""
@@ -56,20 +56,47 @@ def descargar_desde_drive(carpeta_destino):
         creds_path = os.path.join(os.path.dirname(__file__), 'credentials_drive.json')
 
         creds = None
-        if os.path.exists(token_path):
+
+        # Modo GitHub Actions: usar variables de entorno
+        refresh_token  = os.environ.get('GDRIVE_REFRESH_TOKEN')
+        client_id      = os.environ.get('GDRIVE_CLIENT_ID')
+        client_secret  = os.environ.get('GDRIVE_CLIENT_SECRET')
+
+        if refresh_token and client_id and client_secret:
+            from google.oauth2.credentials import Credentials as OAuthCreds
+            creds = OAuthCreds(
+                token=None,
+                refresh_token=refresh_token,
+                token_uri='https://oauth2.googleapis.com/token',
+                client_id=client_id,
+                client_secret=client_secret,
+                scopes=SCOPES
+            )
+            creds.refresh(Request())
+
+        # Modo local: usar token guardado o autenticación interactiva
+        elif os.path.exists(token_path):
             with open(token_path, 'rb') as tk:
                 creds = pkl.load(tk)
-
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                if not os.path.exists(creds_path):
-                    print("  ⚠ No se encontró credentials_drive.json")
-                    print("  Usando carpeta local como fallback.")
-                    return None
-                flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
-                creds = flow.run_local_server(port=0)
+            if not creds or not creds.valid:
+                if creds and creds.expired and creds.refresh_token:
+                    creds.refresh(Request())
+                else:
+                    if not os.path.exists(creds_path):
+                        print("  ⚠ No se encontró credentials_drive.json")
+                        print("  Usando carpeta local como fallback.")
+                        return None
+                    flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
+                    creds = flow.run_local_server(port=0)
+                with open(token_path, 'wb') as tk:
+                    pkl.dump(creds, tk)
+        else:
+            if not os.path.exists(creds_path):
+                print("  ⚠ No se encontró credentials_drive.json")
+                print("  Usando carpeta local como fallback.")
+                return None
+            flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
+            creds = flow.run_local_server(port=0)
             with open(token_path, 'wb') as tk:
                 pkl.dump(creds, tk)
 
@@ -348,7 +375,11 @@ def subir_github(repo_dir, fecha):
     try:
         os.chdir(repo_dir)
         subprocess.run(['git', 'add', '.'], check=True)
-        subprocess.run(['git', 'commit', '-m', f'Dashboard {fecha}'], check=True)
+        result = subprocess.run(['git', 'commit', '-m', f'Dashboard {fecha}'],
+                                capture_output=True, text=True)
+        if 'nothing to commit' in result.stdout or 'nothing to commit' in result.stderr:
+            print("  ✓ GitHub ya estaba actualizado (sin cambios nuevos)")
+            return
         subprocess.run(['git', 'push'], check=True)
         print("  ✓ Subido a GitHub Pages correctamente")
     except subprocess.CalledProcessError as e:
