@@ -1,1 +1,5 @@
 credentials_drive.json 
+*.xlsx
+*.pkl
+fix.py
+fix2.py
