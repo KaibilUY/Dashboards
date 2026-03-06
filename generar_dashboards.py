@@ -208,7 +208,7 @@ def leer_excel(ruta):
         if i <= 8: continue
         area   = str(row[2]).strip() if row[2] else ''
         status = str(row[3]).strip() if row[3] else ''
-        nombre = str(row[1]).strip() if row[1] else ''
+        nombre = str(row[0]).strip() if row[0] else ''  # columna A = nombre camara
         client = classify(area)
         if client is None: continue
         area_stats[area]['total']  += 1
