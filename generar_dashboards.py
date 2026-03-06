@@ -561,7 +561,8 @@ def main():
 
     build_dashboard('Segura', 'SEGURA', '#a855f7', 'Monitoreo y Vigilancia',
         [(['SG', 'MS'], '🟣 SG — Segura', '#3b1a6e'),
-         (['SR', 'MK'], '🩷 SR — Segura + Recorridas Kaibil', '#6e1a3a')],
+         (['SR', 'MK'], '🩷 SR — Segura + Recorridas Kaibil', '#6e1a3a'),
+         (['SP'], '🔵 SP — Segura Punta del Este', '#1a3a7e')],
         history, os.path.join(out, 'segura.html'))
 
     build_dashboard('Segura Punta del Este', 'SEGURA', '#4a9eff', 'Punta del Este',
