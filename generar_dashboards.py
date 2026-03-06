@@ -3,6 +3,7 @@
   GENERADOR AUTOMÁTICO DE DASHBOARDS - KAIBIL / SEGURA
   Hik-Central Professional → GitHub Pages
   Configurado para: Kaibiluy / d_tel
+  v2.0 — historial 7 días con pestañas por día
 =============================================================
 """
 
@@ -16,6 +17,7 @@ from collections import defaultdict
 CARPETA_EXCEL  = r"C:\Users\d_tel\Documents\Hik-Central"
 CARPETA_REPO   = r"C:\Users\d_tel\Documents\dashboards"
 GITHUB_USUARIO = "Kaibiluy"
+MAX_DIAS       = 7   # cantidad máxima de días en el historial
 
 # ─────────────────────────────────────────────
 #  CLASIFICACIÓN
@@ -31,19 +33,20 @@ def classify(area):
     if a.startswith('KS'): return 'KS'
     if a.startswith('KC') or a.lower().startswith('grupo') or a in KC_EXACT: return 'KC'
     if a.startswith('MK'): return 'MK'
-    if a.startswith('SG') or a.startswith('MS'): return 'SG'
+    if a.startswith('MS'): return 'MS'
+    if a.startswith('SG'): return 'SG'
     if a.startswith('SP'): return 'SP'
     if a.startswith('SR'): return 'SR'
     return 'Otros'
 
 # ─────────────────────────────────────────────
-#  LEER EXCEL
+#  LEER EXCEL (uno o varios)
 # ─────────────────────────────────────────────
 
 GOOGLE_DRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID", "1fayZgQE5zRmpo9RchY7Ti0nZKU7qeHmS")
 
-def descargar_desde_drive(carpeta_destino):
-    """Descarga el Excel más reciente desde Google Drive"""
+def descargar_desde_drive(carpeta_destino, max_archivos=MAX_DIAS):
+    """Descarga los últimos max_archivos Excels desde Google Drive"""
     try:
         from googleapiclient.discovery import build
         from google.oauth2.credentials import Credentials
@@ -85,7 +88,7 @@ def descargar_desde_drive(carpeta_destino):
                     if not os.path.exists(creds_path):
                         print("  ⚠ No se encontró credentials_drive.json")
                         print("  Usando carpeta local como fallback.")
-                        return None
+                        return []
                     flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
                     creds = flow.run_local_server(port=0)
                 with open(token_path, 'wb') as tk:
@@ -94,7 +97,7 @@ def descargar_desde_drive(carpeta_destino):
             if not os.path.exists(creds_path):
                 print("  ⚠ No se encontró credentials_drive.json")
                 print("  Usando carpeta local como fallback.")
-                return None
+                return []
             flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
             creds = flow.run_local_server(port=0)
             with open(token_path, 'wb') as tk:
@@ -102,42 +105,41 @@ def descargar_desde_drive(carpeta_destino):
 
         service = build('drive', 'v3', credentials=creds)
 
-        # Buscar archivos Excel en la carpeta
+        # Buscar los últimos max_archivos Excels en la carpeta
         results = service.files().list(
             q=f"'{GOOGLE_DRIVE_FOLDER_ID}' in parents and name contains 'Resource' and name contains '.xlsx' and trashed=false",
             orderBy='name desc',
-            pageSize=1,
+            pageSize=max_archivos,
             fields='files(id, name)'
         ).execute()
 
         files = results.get('files', [])
         if not files:
             print("  ⚠ No se encontraron archivos en Google Drive. Usando carpeta local.")
-            return None
-
-        archivo = files[0]
-        print(f"  Archivo en Drive: {archivo['name']}")
+            return []
 
         if not os.path.exists(carpeta_destino):
             os.makedirs(carpeta_destino)
 
-        ruta_local = os.path.join(carpeta_destino, archivo['name'])
+        rutas = []
+        for archivo in files:
+            print(f"  Archivo en Drive: {archivo['name']}")
+            ruta_local = os.path.join(carpeta_destino, archivo['name'])
+            if not os.path.exists(ruta_local):
+                from googleapiclient.http import MediaIoBaseDownload
+                import io
+                request = service.files().get_media(fileId=archivo['id'])
+                fh = io.FileIO(ruta_local, 'wb')
+                downloader = MediaIoBaseDownload(fh, request)
+                done = False
+                while not done:
+                    _, done = downloader.next_chunk()
+                print(f"    ✓ Descargado desde Drive")
+            else:
+                print(f"    ✓ Ya existe localmente")
+            rutas.append(ruta_local)
 
-        # Descargar solo si no existe ya localmente
-        if not os.path.exists(ruta_local):
-            from googleapiclient.http import MediaIoBaseDownload
-            import io
-            request = service.files().get_media(fileId=archivo['id'])
-            fh = io.FileIO(ruta_local, 'wb')
-            downloader = MediaIoBaseDownload(fh, request)
-            done = False
-            while not done:
-                _, done = downloader.next_chunk()
-            print(f"  ✓ Descargado desde Drive")
-        else:
-            print(f"  ✓ Ya existe localmente")
-
-        return ruta_local
+        return rutas
 
     except ImportError:
         print("  Instalando librerías de Google Drive...")
@@ -149,39 +151,50 @@ def descargar_desde_drive(carpeta_destino):
     except Exception as e:
         print(f"  ⚠ Error al conectar con Drive: {e}")
         print("  Usando carpeta local como fallback.")
-        return None
+        return []
 
 
-def encontrar_excel(carpeta):
-    # Intentar descargar desde Google Drive primero
-    ruta = descargar_desde_drive(carpeta)
-    if ruta:
-        return ruta
+def encontrar_excels(carpeta):
+    """Devuelve lista de (fecha, ruta) ordenada de más antiguo a más reciente."""
+    rutas_drive = descargar_desde_drive(carpeta, MAX_DIAS)
+    if rutas_drive:
+        candidatos = rutas_drive
+    else:
+        # Fallback: buscar en carpeta local
+        if not os.path.exists(carpeta):
+            os.makedirs(carpeta)
+            print(f"  Carpeta creada: {carpeta}")
+        candidatos = [
+            os.path.join(carpeta, f) for f in os.listdir(carpeta)
+            if f.lower().replace(' ', '_').startswith('resource_online_and_offline_log')
+            and f.endswith('.xlsx')
+            and '__1_' not in f
+        ]
 
-    # Fallback: buscar en carpeta local
-    if not os.path.exists(carpeta):
-        os.makedirs(carpeta)
-        print(f"  Carpeta creada: {carpeta}")
-    archivos = [
-        f for f in os.listdir(carpeta)
-        if f.lower().replace(' ', '_').startswith('resource_online_and_offline_log')
-        and f.endswith('.xlsx')
-        and '__1_' not in f
-    ]
-    if not archivos:
+    if not candidatos:
         print(f"\n  ERROR: No se encontró ningún archivo Excel en:\n  {carpeta}")
         print("  Copiá el archivo de Hik-Central a esa carpeta y volvé a ejecutar.")
         sys.exit(1)
-    archivos.sort(reverse=True)
-    ruta = os.path.join(carpeta, archivos[0])
-    print(f"  Archivo local: {archivos[0]}")
-    return ruta
+
+    resultado = []
+    for ruta in candidatos:
+        m = re.search(r'(\d{8})', os.path.basename(ruta))
+        if m:
+            fecha_dt = datetime.strptime(m.group(1), '%Y%m%d')
+        else:
+            fecha_dt = datetime.today()
+        resultado.append((fecha_dt, ruta))
+
+    # Ordenar más antiguo → más reciente, tomar los últimos MAX_DIAS
+    resultado.sort(key=lambda x: x[0])
+    resultado = resultado[-MAX_DIAS:]
+    return resultado
+
 
 def leer_excel(ruta):
     try:
         import openpyxl
     except ImportError:
-        print("  Instalando openpyxl...")
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'openpyxl'])
         import openpyxl
 
@@ -196,7 +209,7 @@ def leer_excel(ruta):
         area   = str(row[2]).strip() if row[2] else ''
         status = str(row[3]).strip() if row[3] else ''
         client = classify(area)
-        if client is None: continue  # ignorar área BAJAS
+        if client is None: continue
         area_stats[area]['total']  += 1
         area_stats[area]['client']  = client
         if status == 'Offline':
@@ -212,12 +225,13 @@ def leer_excel(ruta):
     return areas, fecha
 
 # ─────────────────────────────────────────────
-#  HTML
+#  HTML — semáforo ACTUALIZADO
+#  🟢 = 0%  🟡 < 20%  🔴 ≥ 20%
 # ─────────────────────────────────────────────
 def sem(pct):
-    if pct > 30: return ('sem-red',   'pct-red',    '#ef4444')
-    if pct > 10: return ('sem-yellow','pct-yellow', '#f59e0b')
-    return             ('sem-green',  'pct-green',  '#22c55e')
+    if pct == 0:  return ('sem-green',  'pct-green',  '#22c55e')
+    if pct < 20:  return ('sem-yellow', 'pct-yellow', '#f59e0b')
+    return              ('sem-red',    'pct-red',    '#ef4444')
 
 def area_row(a):
     sc, pc, bc = sem(a['pct'])
@@ -239,6 +253,16 @@ CSS = """
   .sublabel{font-size:0.88rem;letter-spacing:1px;font-weight:600;margin-top:2px}
   .fecha{font-size:0.82rem;color:#8899bb;margin-top:3px}
   .top-bar h1{font-size:1.2rem;font-weight:700;color:#fff}
+  /* ── Tabs historial ── */
+  .tab-bar{display:flex;gap:4px;padding:10px 32px 0;background:#13172a;
+    border-bottom:2px solid #2d3550;flex-wrap:wrap}
+  .tab-btn{padding:8px 16px;border:none;border-radius:8px 8px 0 0;cursor:pointer;
+    font-size:0.78rem;font-weight:600;letter-spacing:0.5px;background:#0d1a30;
+    color:#7a9cc0;border:1px solid #2d3550;border-bottom:none;transition:all .15s}
+  .tab-btn.active{background:#1a1f2e;color:#fff;border-color:#3a4a6e}
+  .tab-btn:hover:not(.active){background:#1a1f2e;color:#cde}
+  .tab-pane{display:none}.tab-pane.active{display:block}
+  /* ── Summary ── */
   .summary-bar{display:flex;gap:16px;padding:20px 32px;background:#13172a;
     border-bottom:1px solid #2d3550;flex-wrap:wrap}
   .s-card{flex:1;min-width:130px;background:#1a1f2e;border-radius:10px;
@@ -253,6 +277,7 @@ CSS = """
   .dot-red{background:#ef4444;box-shadow:0 0 8px #ef444499}
   .dot-yellow{background:#f59e0b;box-shadow:0 0 8px #f59e0b99}
   .dot-green{background:#22c55e;box-shadow:0 0 8px #22c55e99}
+  /* ── Grid ── */
   .clients-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));
     gap:22px;padding:22px 32px 32px}
   .client-panel{background:#1a1f2e;border-radius:14px;overflow:hidden;border:1px solid #2d3550}
@@ -284,9 +309,35 @@ CSS = """
   .pct-red{color:#ef4444}.pct-yellow{color:#f59e0b}.pct-green{color:#22c55e}
   .mini-bar{width:65px;background:#0f1117;border-radius:3px;height:5px;flex-shrink:0}
   .mini-bar .mfill{height:100%;border-radius:3px}
+  /* ── Historial sparkbars ── */
+  .hist-section{padding:18px 32px 8px}
+  .hist-title{font-size:0.78rem;font-weight:700;color:#556;text-transform:uppercase;
+    letter-spacing:1px;margin-bottom:12px}
+  .hist-row{display:flex;gap:6px;align-items:flex-end;margin-bottom:14px}
+  .hist-label{font-size:0.72rem;color:#7a9cc0;width:90px;flex-shrink:0;padding-bottom:18px}
+  .hist-bars{display:flex;gap:5px;align-items:flex-end;flex:1}
+  .hist-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
+  .hist-bar-bg{width:100%;background:#131826;border-radius:3px 3px 0 0;
+    position:relative;overflow:hidden;height:50px;border:1px solid #1a2e50}
+  .hist-bar-fill{position:absolute;bottom:0;width:100%;border-radius:2px 2px 0 0}
+  .hist-date{font-size:0.62rem;color:#445;text-align:center;white-space:nowrap}
+  .hist-pct{font-size:0.68rem;font-weight:700;text-align:center}
   .footer{text-align:center;padding:14px;color:#445;font-size:0.75rem}
+  @media(max-width:900px){.clients-grid{grid-template-columns:1fr}.tab-bar{padding:10px 16px 0}}
 """
 
+TAB_JS = """<script>
+function showTab(id,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>"""
+
+# ─────────────────────────────────────────────
+#  build_panel — igual que el original
+# ─────────────────────────────────────────────
 def build_panel(label, hdr_color, subset):
     total   = sum(a['total']   for a in subset)
     offline = sum(a['offline'] for a in subset)
@@ -307,38 +358,136 @@ def build_panel(label, hdr_color, subset):
     </div>
     <div class="pct-bar-wrap"><div class="pct-bar-fill" style="width:{min(pct,100)}%"></div></div>
     <div class="legend">
-      <div class="legend-item"><div class="semaforo sem-green"></div> &lt;10%</div>
-      <div class="legend-item"><div class="semaforo sem-yellow"></div> 10–30%</div>
-      <div class="legend-item"><div class="semaforo sem-red"></div> &gt;30%</div>
+      <div class="legend-item"><div class="semaforo sem-green"></div> = 0%</div>
+      <div class="legend-item"><div class="semaforo sem-yellow"></div> &lt;20%</div>
+      <div class="legend-item"><div class="semaforo sem-red"></div> ≥20%</div>
     </div>
     <div class="areas-list">{rows}</div>
   </div>"""
 
-def build_dashboard(titulo, logo_txt, logo_color, sub_label, panels_config, areas, fecha, filename):
-    all_subset = [a for a in areas if a['client'] in [c for cfg in panels_config for c in cfg[0]]]
-    g_total   = sum(a['total']   for a in all_subset)
-    g_offline = sum(a['offline'] for a in all_subset)
-    g_online  = g_total - g_offline
-    g_pct     = round(g_offline / g_total * 100, 1) if g_total else 0
-    n_red    = sum(1 for a in all_subset if a['pct'] > 30)
-    n_yellow = sum(1 for a in all_subset if 10 < a['pct'] <= 30)
-    n_green  = sum(1 for a in all_subset if a['pct'] <= 10)
+# ─────────────────────────────────────────────
+#  Historial sparkbars
+# ─────────────────────────────────────────────
+def build_hist_section(history, panels_config):
+    """
+    history: lista de (fecha_dt, areas) de más antiguo a más reciente.
+    panels_config: igual que en build_dashboard.
+    """
+    if len(history) < 2:
+        return ""
 
-    extra_cards = ''
+    rows_html = []
     for client_keys, label, color in panels_config:
-        sub = [a for a in areas if a['client'] in client_keys]
-        if not sub: continue
-        t = sum(a['total'] for a in sub)
-        o = sum(a['offline'] for a in sub)
-        p = round(o/t*100,1) if t else 0
-        short = label.split('—')[-1].strip() if '—' in label else label
-        extra_cards += f'  <div class="s-card" style="border-color:{color};margin-left:6px"><div class="lbl">{short}</div><div class="val" style="color:{color}">{t}</div><div class="sub">{o} offline ({p}%)</div></div>\n'
+        bars = []
+        for fecha_dt, areas in history:
+            subset = [a for a in areas if a['client'] in client_keys]
+            if not subset:
+                continue
+            total   = sum(a['total']   for a in subset)
+            offline = sum(a['offline'] for a in subset)
+            pct     = round(offline / total * 100, 1) if total else 0
+            _, _, bar_color = sem(pct)
+            height  = min(pct * 2, 100)  # escala: 50% → barra llena
+            day_lbl = fecha_dt.strftime("%d/%m").lstrip("0").replace("/0", "/")
+            bars.append(f"""      <div class="hist-bar-wrap">
+        <div class="hist-bar-bg">
+          <div class="hist-bar-fill" style="height:{height}%;background:{bar_color}"></div>
+        </div>
+        <div class="hist-pct" style="color:{bar_color}">{pct}%</div>
+        <div class="hist-date">{day_lbl}</div>
+      </div>""")
 
-    panels_html = '\n'.join(
-        build_panel(lbl, color, [a for a in areas if a['client'] in cl_keys])
-        for cl_keys, lbl, color in panels_config
-        if any(a['client'] in cl_keys for a in areas)
-    )
+        short = label.split('—')[-1].strip() if '—' in label else label
+        rows_html.append(f"""  <div class="hist-row">
+    <div class="hist-label" style="color:{color}">{short}</div>
+    <div class="hist-bars">
+{''.join(bars)}
+    </div>
+  </div>""")
+
+    if not rows_html:
+        return ""
+    return f"""<div class="hist-section">
+  <div class="hist-title">📈 Historial últimos {len(history)} días</div>
+{''.join(rows_html)}
+</div>"""
+
+# ─────────────────────────────────────────────
+#  build_dashboard — versión con tabs
+# ─────────────────────────────────────────────
+def build_dashboard(titulo, logo_txt, logo_color, sub_label,
+                    panels_config, history, filename):
+    """
+    history: lista de (fecha_dt, areas) de más antiguo a más reciente.
+             El último elemento es el día de hoy.
+    """
+
+    def content_for_day(areas, fecha_str, is_today, history_for_hist):
+        all_subset = [a for a in areas if a['client'] in [c for cfg in panels_config for c in cfg[0]]]
+        g_total   = sum(a['total']   for a in all_subset)
+        g_offline = sum(a['offline'] for a in all_subset)
+        g_online  = g_total - g_offline
+        g_pct     = round(g_offline / g_total * 100, 1) if g_total else 0
+        n_red    = sum(1 for a in all_subset if a['pct'] >= 20)
+        n_yellow = sum(1 for a in all_subset if 0 < a['pct'] < 20)
+        n_green  = sum(1 for a in all_subset if a['pct'] == 0)
+
+        extra_cards = ''
+        for client_keys, label, color in panels_config:
+            sub = [a for a in areas if a['client'] in client_keys]
+            if not sub: continue
+            t = sum(a['total'] for a in sub)
+            o = sum(a['offline'] for a in sub)
+            p = round(o/t*100, 1) if t else 0
+            short = label.split('—')[-1].strip() if '—' in label else label
+            extra_cards += f'  <div class="s-card" style="border-color:{color};margin-left:6px"><div class="lbl">{short}</div><div class="val" style="color:{color}">{t}</div><div class="sub">{o} offline ({p}%)</div></div>\n'
+
+        panels_html = '\n'.join(
+            build_panel(lbl, color, [a for a in areas if a['client'] in cl_keys])
+            for cl_keys, lbl, color in panels_config
+            if any(a['client'] in cl_keys for a in areas)
+        )
+
+        hist_html = build_hist_section(history_for_hist, panels_config) if is_today else ""
+
+        return f"""<div class="summary-bar">
+  <div class="s-card" style="border-color:{logo_color}"><div class="lbl">Total Cámaras</div><div class="val" style="color:{logo_color}">{g_total}</div><div class="sub">{len(all_subset)} áreas</div></div>
+  <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">{g_online}</div><div class="sub">{round(g_online/g_total*100,1) if g_total else 0}% disponibles</div></div>
+  <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">{g_offline}</div><div class="sub">{g_pct}% fuera de línea</div></div>
+  {extra_cards}
+</div>
+<div class="sem-summary">
+  <div class="sem-badge"><div class="dot dot-red"></div><span style="color:#ef4444">{n_red}</span>&nbsp;áreas críticas (≥20%)</div>
+  <div class="sem-badge"><div class="dot dot-yellow"></div><span style="color:#f59e0b">{n_yellow}</span>&nbsp;áreas en alerta (&lt;20%)</div>
+  <div class="sem-badge"><div class="dot dot-green"></div><span style="color:#22c55e">{n_green}</span>&nbsp;áreas sin caída (0%)</div>
+</div>
+{hist_html}
+<div class="clients-grid">{panels_html}</div>"""
+
+    # ── Construir tabs ──────────────────────────────────────────────────────
+    prefix = re.sub(r'[^a-z]', '', titulo.lower())[:4]  # id único por dashboard
+    tabs_bar = []
+    tabs_content = []
+
+    for i, (fecha_dt, areas) in enumerate(reversed(history)):
+        is_today = (i == 0)
+        tab_id   = f"{prefix}_d{i}"
+        # Formato de fecha para el botón: "Hoy 6/3" o "4/3"
+        day_lbl = fecha_dt.strftime("%d/%m").lstrip("0").replace("/0", "/")
+        btn_label = f"Hoy {day_lbl}" if is_today else day_lbl
+        active    = "active" if is_today else ""
+        fecha_str = fecha_dt.strftime("%d/%m/%Y")
+
+        tabs_bar.append(f'<button class="tab-btn {active}" onclick="showTab(\'{tab_id}\',this)">{btn_label}</button>')
+        tabs_content.append(
+            f'<div id="{tab_id}" class="tab-pane {active}">'
+            + content_for_day(areas, fecha_str, is_today, history)
+            + '</div>'
+        )
+
+    tabs_bar_html    = '\n'.join(tabs_bar)
+    tabs_content_html = '\n'.join(tabs_content)
+    today_fecha = history[-1][0].strftime("%d/%m/%Y")
 
     html = f"""<!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -346,22 +495,15 @@ def build_dashboard(titulo, logo_txt, logo_color, sub_label, panels_config, area
 <div class="top-bar">
   <div><div class="logo" style="color:{logo_color}">{logo_txt}</div>
   <div class="sublabel" style="color:{logo_color}88">{sub_label}</div>
-  <div class="fecha">Dashboard de Estado de Cámaras — {fecha}</div></div>
+  <div class="fecha">Dashboard de Estado de Cámaras — {today_fecha}</div></div>
   <h1>Monitor de Disponibilidad</h1>
 </div>
-<div class="summary-bar">
-  <div class="s-card" style="border-color:{logo_color}"><div class="lbl">Total Cámaras</div><div class="val" style="color:{logo_color}">{g_total}</div><div class="sub">{len(all_subset)} áreas</div></div>
-  <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">{g_online}</div><div class="sub">{round(g_online/g_total*100,1) if g_total else 0}% disponibles</div></div>
-  <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">{g_offline}</div><div class="sub">{g_pct}% fuera de línea</div></div>
-  {extra_cards}
+<div class="tab-bar">
+{tabs_bar_html}
 </div>
-<div class="sem-summary">
-  <div class="sem-badge"><div class="dot dot-red"></div><span style="color:#ef4444">{n_red}</span>&nbsp;áreas críticas (&gt;30%)</div>
-  <div class="sem-badge"><div class="dot dot-yellow"></div><span style="color:#f59e0b">{n_yellow}</span>&nbsp;áreas en alerta (10–30%)</div>
-  <div class="sem-badge"><div class="dot dot-green"></div><span style="color:#22c55e">{n_green}</span>&nbsp;áreas normales (&lt;10%)</div>
-</div>
-<div class="clients-grid">{panels_html}</div>
-<div class="footer">Datos al {fecha} · Reporte automático Hik-Central Professional</div>
+{tabs_content_html}
+<div class="footer">Datos al {today_fecha} · Reporte automático Hik-Central Professional</div>
+{TAB_JS}
 </body></html>"""
 
     with open(filename, 'w', encoding='utf-8') as f:
@@ -369,7 +511,7 @@ def build_dashboard(titulo, logo_txt, logo_color, sub_label, panels_config, area
     print(f"  ✓ {os.path.basename(filename)}")
 
 # ─────────────────────────────────────────────
-#  SUBIR A GITHUB
+#  SUBIR A GITHUB — igual que el original
 # ─────────────────────────────────────────────
 def subir_github(repo_dir, fecha):
     try:
@@ -380,6 +522,7 @@ def subir_github(repo_dir, fecha):
         if 'nothing to commit' in result.stdout or 'nothing to commit' in result.stderr:
             print("  ✓ GitHub ya estaba actualizado (sin cambios nuevos)")
             return
+        subprocess.run(['git', 'pull', '--rebase', 'origin', 'main'], check=True)
         subprocess.run(['git', 'push'], check=True)
         print("  ✓ Subido a GitHub Pages correctamente")
     except subprocess.CalledProcessError as e:
@@ -390,16 +533,23 @@ def subir_github(repo_dir, fecha):
 # ─────────────────────────────────────────────
 def main():
     print("=" * 55)
-    print("  GENERADOR DE DASHBOARDS — KAIBIL / SEGURA")
+    print("  GENERADOR DE DASHBOARDS — KAIBIL / SEGURA  v2.0")
     print("=" * 55)
 
-    print("\n[1/4] Buscando Excel más reciente...")
-    ruta_excel = encontrar_excel(CARPETA_EXCEL)
+    print("\n[1/4] Buscando Excels (hasta 7 días)...")
+    pares = encontrar_excels(CARPETA_EXCEL)
+    print(f"  {len(pares)} archivo(s) encontrado(s):")
+    for dt, ruta in pares:
+        print(f"    {dt.strftime('%d/%m/%Y')}  {os.path.basename(ruta)}")
 
     print("\n[2/4] Procesando datos...")
-    areas, fecha = leer_excel(ruta_excel)
-    print(f"  Fecha del reporte: {fecha}")
-    print(f"  Áreas procesadas:  {len(areas)}")
+    history = []
+    for fecha_dt, ruta in pares:
+        areas, _ = leer_excel(ruta)
+        history.append((fecha_dt, areas))
+        print(f"  ✓ {fecha_dt.strftime('%d/%m/%Y')} — {len(areas)} áreas")
+
+    today_fecha = history[-1][0].strftime("%d/%m/%Y")
 
     print("\n[3/4] Generando dashboards...")
     out = os.path.dirname(os.path.abspath(__file__))
@@ -407,25 +557,25 @@ def main():
     build_dashboard('Kaibil', 'KAIBIL', '#4a9eff', 'Seguridad Privada',
         [(['KS'], '🔵 KS — Kaibil Abonados', '#1a3a6e'),
          (['KC'], '🟢 KC — Kaibil Barriales', '#1a4a2e')],
-        areas, fecha, os.path.join(out, 'index.html'))
+        history, os.path.join(out, 'index.html'))
 
     build_dashboard('Segura', 'SEGURA', '#a855f7', 'Monitoreo y Vigilancia',
-        [(['SG'], '🟣 SG — Segura', '#3b1a6e'),
-         (['SR'], '🩷 SR — Segura + Recorridas Kaibil', '#6e1a3a')],
-        areas, fecha, os.path.join(out, 'segura.html'))
+        [(['SG', 'MS'], '🟣 SG — Segura', '#3b1a6e'),
+         (['SR', 'MK'], '🩷 SR — Segura + Recorridas Kaibil', '#6e1a3a')],
+        history, os.path.join(out, 'segura.html'))
 
     build_dashboard('Segura Punta del Este', 'SEGURA', '#4a9eff', 'Punta del Este',
         [(['SP'], '🔵 SP — Segura Punta del Este', '#1a3a7e')],
-        areas, fecha, os.path.join(out, 'punta-del-este.html'))
+        history, os.path.join(out, 'punta-del-este.html'))
 
     print("\n[4/4] Subiendo a GitHub...")
-    subir_github(CARPETA_REPO, fecha)
+    subir_github(CARPETA_REPO, today_fecha)
 
     print("\n" + "=" * 55)
     print("  ✓ PROCESO COMPLETADO")
-    print(f"\n  🔵 Kaibil:        https://{GITHUB_USUARIO}.github.io/dashboards/")
-    print(f"  🟣 Segura:        https://{GITHUB_USUARIO}.github.io/dashboards/segura.html")
-    print(f"  🔵 Punta del Este:https://{GITHUB_USUARIO}.github.io/dashboards/punta-del-este.html")
+    print(f"\n  🔵 Kaibil:         https://{GITHUB_USUARIO}.github.io/dashboards/")
+    print(f"  🟣 Segura:         https://{GITHUB_USUARIO}.github.io/dashboards/segura.html")
+    print(f"  🔵 Punta del Este: https://{GITHUB_USUARIO}.github.io/dashboards/punta-del-este.html")
     print("=" * 55)
 
 if __name__ == '__main__':
