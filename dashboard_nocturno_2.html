@@ -390,11 +390,40 @@
     margin: 0 32px;
   }
 
-  @media (max-width: 640px) {
-    .header, .content, .tabs-wrap { padding-left: 16px; padding-right: 16px; }
+  @media (max-width: 768px) {
+    .header, .content, .tabs-wrap { padding-left: 12px; padding-right: 12px; }
+    .header { flex-direction: column; gap: 8px; }
+    .header-badge { align-items: flex-start; }
+    h1 { font-size: 20px; }
+
+    /* KPIs: 2 columnas en móvil */
+    .kpi-strip { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .kpi { padding: 12px 14px; }
+    .kpi-val { font-size: 22px; }
+
+    /* Tabla: ocultar barras, mostrar solo números */
+    .bar-track { display: none; }
+    .bar-inline { gap: 4px; }
+    .bar-num { width: auto; font-size: 13px; }
+    .pct-small { width: auto; font-size: 10px; }
+
+    /* Tabla: reducir padding y fuente */
+    thead th { padding: 8px 10px; font-size: 9px; }
+    td { padding: 10px 10px; font-size: 12px; }
+    .hora-cell { font-size: 13px; }
+
+    /* Ocultar columna Autocedulado en móvil muy chico */
+    table { table-layout: fixed; width: 100%; }
+
+    footer { margin: 0 12px; font-size: 9px; }
+  }
+
+  @media (max-width: 480px) {
     .kpi-strip { grid-template-columns: 1fr 1fr; }
-    .bar-track { width: 50px; }
-    footer { margin: 0 16px; }
+    .kpi-val { font-size: 20px; }
+    .pct-small { display: none; }
+    thead th:nth-child(3) { display: none; }  /* ocultar col Autocedulado header */
+    td:nth-child(3) { display: none; }         /* ocultar col Autocedulado data */
   }
 </style>
 </head>
