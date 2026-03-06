@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turno Nocturno — Kaibil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ── CONFIG: reemplazar con tu API key y Sheet ID ── */
+  /* Ver instrucciones al pie del archivo             */
+
+  :root {
+    --bg:       #07090f;
+    --surface:  #0c1018;
+    --card:     #111620;
+    --border:   #1c2535;
+    --border2:  #263040;
+    --manual:   #34d399;
+    --auto:     #f87171;
+    --sinconf:  #fbbf24;
+    --red:      #ff4444;
+    --text:     #e2e8f0;
+    --muted:    #4b5a6e;
+    --label:    #7f8fa8;
+    --mono:     'DM Mono', monospace;
+    --sans:     'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 100vh;
+    /* Fondo con grid sutil */
+    background-image:
+      linear-gradient(rgba(96,165,250,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(96,165,250,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 28px 32px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-left { display: flex; flex-direction: column; gap: 6px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--sinconf);
+    box-shadow: 0 0 10px var(--sinconf);
+    animation: blink 2.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+  h1 {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -.02em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  h1 span { color: var(--manual); }
+  .subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .header-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .badge-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--label);
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .badge-source {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .06em;
+  }
+
+  /* ── ESTADO / LOADING ── */
+  .state-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--manual);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state-msg { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .error-box {
+    background: rgba(248,113,113,.07);
+    border: 1px solid rgba(248,113,113,.25);
+    border-radius: 6px;
+    padding: 16px 24px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--red);
+    max-width: 480px;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* ── TABS ── */
+  .tabs-wrap {
+    padding: 24px 32px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs-wrap::-webkit-scrollbar { display: none; }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    width: max-content;
+    min-width: 100%;
+  }
+  .tab {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    padding: 8px 18px 10px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    background: transparent;
+    transition: color .15s, background .15s;
+    white-space: nowrap;
+    letter-spacing: .04em;
+    position: relative;
+    bottom: -1px;
+  }
+  .tab:hover { color: var(--label); background: rgba(255,255,255,.03); }
+  .tab.active {
+    color: var(--manual);
+    background: var(--card);
+    border-color: var(--border);
+    border-bottom-color: var(--card);
+  }
+
+  /* ── CONTENT ── */
+  .content { padding: 24px 32px 48px; }
+  .day-panel { display: none; }
+  .day-panel.active { display: block; }
+
+  /* ── KPI STRIP ── */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .kpi.m::after { background: var(--manual); }
+  .kpi.a::after { background: var(--auto); }
+  .kpi.s::after { background: var(--sinconf); }
+  .kpi.t::after { background: var(--border2); }
+  .kpi-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .kpi-val {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .kpi.m .kpi-val { color: var(--manual); }
+  .kpi.a .kpi-val { color: var(--auto); }
+  .kpi.s .kpi-val { color: var(--sinconf); }
+  .kpi.t .kpi-val { color: var(--text); }
+  .kpi-pct {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .table-title {
+    padding: 14px 20px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .table-title::before {
+    content: '';
+    width: 3px; height: 14px;
+    background: var(--manual);
+    border-radius: 2px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead th {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,.01);
+  }
+  thead th:not(:first-child) { text-align: right; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .1s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,.02); }
+
+  td {
+    padding: 13px 20px;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  td:not(:first-child) { text-align: right; }
+
+  .hora-cell {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: .04em;
+  }
+  .total-cell { color: var(--label); font-size: 13px; }
+
+  /* Barras inline */
+  .bar-cell { text-align: right !important; }
+  .bar-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .bar-track {
+    width: 80px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill { height: 100%; border-radius: 3px; }
+  .bar-fill.m { background: var(--manual); }
+  .bar-fill.a { background: var(--auto); }
+  .bar-fill.s { background: var(--sinconf); }
+  .bar-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    width: 36px;
+    text-align: right;
+  }
+  .bar-num.m { color: var(--manual); }
+  .bar-num.a { color: var(--auto); }
+  .bar-num.s { color: var(--sinconf); }
+  .pct-small {
+    font-size: 10px;
+    color: var(--muted);
+    width: 34px;
+    text-align: right;
+    font-family: var(--mono);
+  }
+
+  /* Semáforo sin confirmar */
+  .sc-val { font-family: var(--mono); font-size: 13px; }
+  .sc-val.ok     { color: var(--auto); }
+  .sc-val.warn   { color: var(--sinconf); }
+  .sc-val.danger { color: var(--red); font-weight: 500; }
+
+  /* Fila dominante */
+  tr.dom-manual { background: rgba(96,165,250,.04); }
+  tr.dom-auto   { background: rgba(52,211,153,.03); }
+
+  /* ── TOTAL ROW ── */
+  tr.total-row td {
+    border-top: 1px solid var(--border2);
+    font-weight: 500;
+    color: var(--text);
+    background: rgba(255,255,255,.02);
+    font-size: 12px;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .leg-dot {
+    width: 8px; height: 8px;
+    border-radius: 2px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 0 32px 32px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin: 0 32px;
+  }
+
+  @media (max-width: 640px) {
+    .header, .content, .tabs-wrap { padding-left: 16px; padding-right: 16px; }
+    .kpi-strip { grid-template-columns: 1fr 1fr; }
+    .bar-track { width: 50px; }
+    footer { margin: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <span class="eyebrow">Supervisión operativa · Kaibil Seguridad</span>
+    <h1>Turno <span>Nocturno</span></h1>
+    <span class="subtitle">22:00 → 06:00 · Clasificación automática por tiempo de respuesta · Hik-Central</span>
+  </div>
+  <div class="header-badge">
+    <span class="badge-date" id="hdr-date">Cargando…</span>
+    <span class="badge-source">Google Sheets · Actualización automática</span>
+  </div>
+</div>
+
+<div id="app">
+  <div class="state-container" id="loading-state">
+    <div class="spinner"></div>
+    <span class="state-msg">Consultando datos…</span>
+  </div>
+</div>
+
+<footer>
+  <span>Kaibil Seguridad · Reporte operativo nocturno · Hik-Central Professional</span>
+  <span id="footer-ts">—</span>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CONFIGURACIÓN — completar con tus valores
+// ══════════════════════════════════════════════════════
+const SHEET_ID  = '1VRK5LXAk-2jRWoHzbgo_x78LFFZ5JdEwfZ8yxH9EVdQ';
+const API_KEY   = 'AIzaSyDeVp6NOfk3Ebs2SY1wCNCwZWaHnFo0Tq0';   // Google Sheets API v4
+const HOJA      = 'Desglose Horario';
+// ══════════════════════════════════════════════════════
+
+const HORAS_NOC = ['22:00','23:00','00:00','01:00','02:00','03:00','04:00','05:00'];
+
+async function fetchSheetData() {
+  const range  = encodeURIComponent(`'${HOJA}'!A:I`);
+  const url    = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+  const res    = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status} — ${await res.text()}`);
+  const json   = await res.json();
+  return json.values || [];
+}
+
+function parseData(rows) {
+  // rows[0] = headers, rows[1..] = datos
+  // Formato: Fecha | Hora | Total hora | Manual | % Manual | Autocedulado | % Auto | Sin confirmar | % S/C
+  const days = {};
+  let currentFecha = null;
+
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    if (!r || r.length < 3) continue;
+
+    const fechaCell = String(r[0] || '').trim();
+    const hora      = String(r[1] || '').trim();
+    if (!hora) continue;
+
+    if (fechaCell) currentFecha = fechaCell;
+    if (!currentFecha) continue;
+
+    if (!days[currentFecha]) days[currentFecha] = [];
+    days[currentFecha].push({
+      hora,
+      total:   parseInt(r[2]) || 0,
+      manual:  parseInt(r[3]) || 0,
+      pctM:    parseFloat(r[4]) || 0,
+      auto:    parseInt(r[5]) || 0,
+      pctA:    parseFloat(r[6]) || 0,
+      sinconf: parseInt(r[7]) || 0,
+      pctS:    parseFloat(r[8]) || 0,
+    });
+  }
+
+  // Ordenar fechas descendente (más reciente primero) y tomar últimas 7
+  const sorted = Object.keys(days)
+    .sort((a,b) => b.localeCompare(a))
+    .slice(0, 7);
+
+  return sorted.map(f => ({ fecha: f, horas: days[f] }));
+}
+
+function formatFecha(f) {
+  // "2026-03-04" → "Mar 04"
+  const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const [y,m,d] = f.split('-');
+  return `${meses[parseInt(m)-1]} ${d}`;
+}
+
+function scClass(sinconf, total) {
+  if (total === 0 || sinconf === 0) return 'ok';
+  const pct = sinconf / total;
+  if (pct > 0.3) return 'danger';
+  if (pct > 0.1) return 'warn';
+  return 'ok';
+}
+
+function buildDayPanel(dayData, idx) {
+  const { fecha, horas } = dayData;
+
+  // KPIs totales del día
+  const totTotal   = horas.reduce((s,h) => s + h.total,   0);
+  const totManual  = horas.reduce((s,h) => s + h.manual,  0);
+  const totAuto    = horas.reduce((s,h) => s + h.auto,    0);
+  const totSinconf = horas.reduce((s,h) => s + h.sinconf, 0);
+  const pctM = totTotal > 0 ? Math.round(totManual  / totTotal * 100) : 0;
+  const pctA = totTotal > 0 ? Math.round(totAuto    / totTotal * 100) : 0;
+  const pctS = totTotal > 0 ? Math.round(totSinconf / totTotal * 100) : 0;
+
+  const maxTotal = Math.max(...horas.map(h => h.total), 1);
+
+  const rows = horas.map(h => {
+    const dom = h.manual > h.auto ? 'dom-manual' : (h.auto > h.manual ? 'dom-auto' : '');
+    const scCls = scClass(h.sinconf, h.total);
+    const pctMBar = Math.round(h.pctM);
+    const pctABar = Math.round(h.pctA);
+    const pctSBar = Math.round(h.pctS);
+
+    return `
+    <tr class="${dom}">
+      <td class="hora-cell">${h.hora}</td>
+      <td class="total-cell">${h.total}</td>
+      <td class="bar-cell">
+        <div class="bar-inline">
+          <span class="pct-small">${pctMBar}%</span>
+          <div class="bar-track"><div class="bar-fill m" style="width:${pctMBar}%"></div></div>
+          <span class="bar-num m">${h.manual}</span>
+        </div>
+      </td>
+      <td class="bar-cell">
+        <div class="bar-inline">
+          <span class="pct-small">${pctABar}%</span>
+          <div class="bar-track"><div class="bar-fill a" style="width:${pctABar}%"></div></div>
+          <span class="bar-num a">${h.auto}</span>
+        </div>
+      </td>
+      <td><span class="sc-val ${scCls}">${h.sinconf > 0 ? h.sinconf : '—'}</span>${h.sinconf > 0 ? `<span class="pct-small" style="margin-left:6px">${pctSBar}%</span>` : ''}</td>
+    </tr>`;
+  }).join('');
+
+  const scTotalCls = scClass(totSinconf, totTotal);
+
+  return `
+  <div class="day-panel${idx === 0 ? ' active' : ''}" id="panel-${idx}">
+    <div class="kpi-strip">
+      <div class="kpi t">
+        <div class="kpi-label">Total nocturno</div>
+        <div class="kpi-val">${totTotal.toLocaleString('es')}</div>
+        <div class="kpi-pct">eventos 22:00–06:00</div>
+      </div>
+      <div class="kpi m">
+        <div class="kpi-label">Operador</div>
+        <div class="kpi-val">${totManual.toLocaleString('es')}</div>
+        <div class="kpi-pct">${pctM}% del turno</div>
+      </div>
+      <div class="kpi a">
+        <div class="kpi-label">Autocedulados</div>
+        <div class="kpi-val">${totAuto.toLocaleString('es')}</div>
+        <div class="kpi-pct">${pctA}% del turno</div>
+      </div>
+      <div class="kpi s">
+        <div class="kpi-label">Sin confirmar</div>
+        <div class="kpi-val ${scClass(totSinconf,totTotal)}">${totSinconf}</div>
+        <div class="kpi-pct">${pctS}% del turno</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-title">Desglose por hora nocturna — ${fecha}</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Hora</th>
+            <th>Total</th>
+            <th>Operador</th>
+            <th>Autocedulado</th>
+            <th>Sin confirmar</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+          <tr class="total-row">
+            <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">TOTAL</td>
+            <td>${totTotal}</td>
+            <td class="bar-cell">
+              <div class="bar-inline">
+                <span class="pct-small">${pctM}%</span>
+                <div class="bar-track"><div class="bar-fill m" style="width:${pctM}%"></div></div>
+                <span class="bar-num m">${totManual}</span>
+              </div>
+            </td>
+            <td class="bar-cell">
+              <div class="bar-inline">
+                <span class="pct-small">${pctA}%</span>
+                <div class="bar-track"><div class="bar-fill a" style="width:${pctA}%"></div></div>
+                <span class="bar-num a">${totAuto}</span>
+              </div>
+            </td>
+            <td><span class="sc-val ${scTotalCls}">${totSinconf > 0 ? totSinconf : '—'}</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:var(--manual)"></div>Operador — respuesta &lt; 45 min</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--auto)"></div>Autocedulado — cierre automático ~60 min</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--sinconf)"></div>Sin confirmar — sin cierre de ningún tipo</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildTabs(days) {
+  return days.map((d, i) => `
+    <button class="tab${i === 0 ? ' active' : ''}" onclick="switchTab(${i})" id="tab-${i}">
+      ${formatFecha(d.fecha)}
+    </button>`
+  ).join('');
+}
+
+function switchTab(idx) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.day-panel').forEach((p,i) => p.classList.toggle('active', i === idx));
+}
+
+async function init() {
+  const app = document.getElementById('app');
+  try {
+    const raw  = await fetchSheetData();
+    const days = parseData(raw);
+
+    if (days.length === 0) {
+      app.innerHTML = `<div class="state-container"><div class="error-box">No se encontraron datos en la hoja "${HOJA}".<br>Verificá que el pipeline haya procesado al menos un email.</div></div>`;
+      return;
+    }
+
+    document.getElementById('hdr-date').textContent = formatFecha(days[0].fecha);
+    document.getElementById('footer-ts').textContent =
+      `Última actualización: ${new Date().toLocaleString('es-UY', {timeZone:'America/Montevideo'})}`;
+
+    app.innerHTML = `
+      <div class="tabs-wrap">
+        <div class="tabs">${buildTabs(days)}</div>
+      </div>
+      <div class="content">
+        ${days.map((d,i) => buildDayPanel(d,i)).join('')}
+      </div>`;
+
+  } catch(e) {
+    app.innerHTML = `
+      <div class="state-container">
+        <div class="error-box">
+          Error al cargar datos:<br><br>${e.message}<br><br>
+          Verificá que el API_KEY esté configurado correctamente<br>
+          y que la hoja sea pública (o que el API key tenga acceso).
+        </div>
+      </div>`;
+  }
+}
+
+init();
+</script>
+
+<!--
+════════════════════════════════════════════════════
+  INSTRUCCIONES DE CONFIGURACIÓN
+════════════════════════════════════════════════════
+
+1. ACTIVAR GOOGLE SHEETS API
+   → Google Cloud Console → APIs → "Google Sheets API" → Habilitar
+
+2. CREAR API KEY
+   → Google Cloud Console → Credenciales → Crear credencial → Clave de API
+   → Copiar la clave y pegarla en API_KEY arriba
+
+3. HACER EL SHEET PÚBLICO (lectura)
+   → En el Google Sheet: Compartir → "Cualquier usuario con el enlace" → Lector
+
+4. ENVÍO POR EMAIL
+   Opción A — Adjuntar el HTML directamente (el supervisor lo abre en el browser)
+   Opción B — Subirlo a GitHub Pages o Google Sites y enviar el enlace
+
+5. AUTOMATIZAR EL ENVÍO (Apps Script)
+   Agregar en el script principal, al final de procesarMailNuevo():
+
+   function enviarReporteSupervisor() {
+     const url = 'https://TU_URL_DEL_DASHBOARD';   // URL pública del HTML
+     GmailApp.sendEmail(
+       'supervisor@segurasatelital.com.uy',
+       'Reporte Nocturno — ' + Utilities.formatDate(new Date(), 'America/Montevideo', 'dd/MM/yyyy'),
+       'Se adjunta el reporte del turno nocturno.',
+       { htmlBody: '<p>Ver reporte completo: <a href="' + url + '">' + url + '</a></p>' }
+     );
+   }
+════════════════════════════════════════════════════
+-->
+</body>
+</html>
