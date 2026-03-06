@@ -560,8 +560,8 @@ def main():
         history, os.path.join(out, 'index.html'))
 
     build_dashboard('Segura', 'SEGURA', '#a855f7', 'Monitoreo y Vigilancia',
-        [(['SG', 'MS'], '🟣 SG — Segura', '#3b1a6e'),
-         (['SR', 'MK'], '🩷 SR — Segura + Recorridas Kaibil', '#6e1a3a'),
+        [(['SG'], '🟣 SG — Segura', '#3b1a6e'),
+         (['SR', 'MK', 'MS'], '🩷 SR — Segura + Otros', '#6e1a3a'),
          (['SP'], '🔵 SP — Segura Punta del Este', '#1a3a7e')],
         history, os.path.join(out, 'segura.html'))
 
