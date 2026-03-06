@@ -79,6 +79,20 @@
   .hist-date{font-size:0.62rem;color:#445;text-align:center;white-space:nowrap}
   .hist-pct{font-size:0.68rem;font-weight:700;text-align:center}
   .footer{text-align:center;padding:14px;color:#445;font-size:0.75rem}
+  /* -- Camara dropdown -- */
+  .area-wrap{display:flex;flex-direction:column}
+  .cam-arrow{font-size:0.7rem;color:#556;margin-left:4px;transition:transform .2s;flex-shrink:0}
+  .cam-arrow.open{transform:rotate(90deg);color:#4a9eff}
+  .cam-panel{display:none;padding:6px 12px 8px 36px;background:#0d1220;
+    border-left:2px solid #1a2e50;margin:0 0 4px 0;border-radius:0 0 6px 6px}
+  .cam-item{display:flex;align-items:center;gap:7px;padding:3px 0;
+    border-bottom:1px solid #131826}
+  .cam-item:last-child{border-bottom:none}
+  .cam-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .cam-on{background:#22c55e;box-shadow:0 0 5px #22c55e88}
+  .cam-off{background:#ef4444;box-shadow:0 0 5px #ef444488}
+  .cam-name{font-size:0.75rem;color:#aab}
+  .cam-name-off{color:#ef4444}
   @media(max-width:900px){.clients-grid{grid-template-columns:1fr}.tab-bar{padding:10px 16px 0}}
 </style></head><body>
 <div class="top-bar">
@@ -177,117 +191,181 @@
       <div class="legend-item"><div class="semaforo sem-yellow"></div> &lt;20%</div>
       <div class="legend-item"><div class="semaforo sem-red"></div> ≥20%</div>
     </div>
-    <div class="areas-list">      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
-        <div class="area-counts">5/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+    <div class="areas-list">      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp3638___cranelos')">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
+          <div class="area-counts">5/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          <span class="cam-arrow" id="arr_sp3638___cranelos">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp3638___cranelos"><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3638.from-al.com</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3638.from-al.com</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3638.from-al.com</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3638.from-al.com</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3638.from-al.com</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
-        <div class="area-counts">16/16 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp3975___cyros_schadlu')">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
+          <div class="area-counts">16/16 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          <span class="cam-arrow" id="arr_sp3975___cyros_schadlu">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp3975___cyros_schadlu"><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">Segura3975.blogdns.net</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
-        <div class="area-counts">8/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp2767___edificio_pinares_del_')">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
+          <div class="area-counts">8/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          <span class="cam-arrow" id="arr_sp2767___edificio_pinares_del_">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp2767___edificio_pinares_del_"><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">200.58.142.113</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">200.58.142.113</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">200.58.142.113</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">200.58.142.113</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">200.58.142.113</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">200.58.142.113</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">200.58.142.113</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">200.58.142.113</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
-        <div class="area-counts">9/9 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp3987___ignacio_moro')">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
+          <div class="area-counts">9/9 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          <span class="cam-arrow" id="arr_sp3987___ignacio_moro">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp3987___ignacio_moro"><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3987.dvrdns.org</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3987.dvrdns.org</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3987.dvrdns.org</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3987.dvrdns.org</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3987.dvrdns.org</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3987.dvrdns.org</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3987.dvrdns.org</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3987.dvrdns.org</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">segura3987.dvrdns.org</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
-        <div class="area-counts">6/14 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">42.9%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp3245___palcos_de_manantiales')">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
+          <div class="area-counts">6/14 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">42.9%</div>
+          <span class="cam-arrow" id="arr_sp3245___palcos_de_manantiales">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp3245___palcos_de_manantiales"><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f559cf5.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f559cf5.sn.mynetname.net</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-yellow"></div>
-        <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
-        <div class="area-counts">1/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
-        <div class="area-pct pct-yellow">12.5%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp2780___edificio_palcos_de_la')">
+          <div class="semaforo sem-yellow"></div>
+          <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
+          <div class="area-counts">1/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+          <div class="area-pct pct-yellow">12.5%</div>
+          <span class="cam-arrow" id="arr_sp2780___edificio_palcos_de_la">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp2780___edificio_palcos_de_la"><div class="cam-item"><div class="cam-dot cam-off"></div><span class="cam-name cam-name-off">de350f096f2c.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f096f2c.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f096f2c.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f096f2c.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f096f2c.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f096f2c.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f096f2c.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">de350f096f2c.sn.mynetname.net</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp3246___luzbel')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp3246___luzbel">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp3246___luzbel"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">autopunto.ddns.net</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
-        <div class="area-counts">0/3 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp2638___la_caba_a_del_rio_s_a')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
+          <div class="area-counts">0/3 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp2638___la_caba_a_del_rio_s_a">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp2638___la_caba_a_del_rio_s_a"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2638.is-a-chef.org</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2638.is-a-chef.org</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2638.is-a-chef.org</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
-        <div class="area-counts">0/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp3261___diamanfield')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
+          <div class="area-counts">0/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp3261___diamanfield">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp3261___diamanfield"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3261.dynalias.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3261.dynalias.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3261.dynalias.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3261.dynalias.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3261.dynalias.net</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp4045___rocio_ra_a__alfero_na')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp4045___rocio_ra_a__alfero_na">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp4045___rocio_ra_a__alfero_na"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura4045.is-certified.com</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura4045.is-certified.com</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura4045.is-certified.com</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura4045.is-certified.com</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp2632___bafirus_sa')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp2632___bafirus_sa">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp2632___bafirus_sa"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura2632.homelinux.net</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp4054___julio_fischer_requena')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp4054___julio_fischer_requena">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp4054___julio_fischer_requena"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hek08jgmjhh.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hek08jgmjhh.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hek08jgmjhh.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hek08jgmjhh.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hek08jgmjhh.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hek08jgmjhh.sn.mynetname.net</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
-        <div class="area-counts">0/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp_4781___edificio_balleneros')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
+          <div class="area-counts">0/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp_4781___edificio_balleneros">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp_4781___edificio_balleneros"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hgv0adt3yt0.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hgv0adt3yt0.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hgv0adt3yt0.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hgv0adt3yt0.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hgv0adt3yt0.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hgv0adt3yt0.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hgv0adt3yt0.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">hgv0adt3yt0.sn.mynetname.net</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp3465___triopark_s_a_')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp3465___triopark_s_a_">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp3465___triopark_s_a_"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">643105af4f44.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">643105af4f44.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">643105af4f44.sn.mynetname.net</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">643105af4f44.sn.mynetname.net</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp3335___martin_yanguela')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp3335___martin_yanguela">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp3335___martin_yanguela"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3335.dyndns.info</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3335.dyndns.info</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3335.dyndns.info</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3335.dyndns.info</span></div></div>
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="cursor:pointer;" onclick="toggleCams('sp3076___ester_campos')">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          <span class="cam-arrow" id="arr_sp3076___ester_campos">▶</span>
+        </div>
+        <div class="cam-panel" id="cams_sp3076___ester_campos"><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3076.stuff-4-sale.org</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3076.stuff-4-sale.org</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3076.stuff-4-sale.org</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3076.stuff-4-sale.org</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3076.stuff-4-sale.org</span></div><div class="cam-item"><div class="cam-dot cam-on"></div><span class="cam-name ">segura3076.stuff-4-sale.org</span></div></div>
       </div></div>
   </div></div></div>
 <div id="segu_d1" class="tab-pane "><div class="summary-bar">
@@ -321,117 +399,181 @@
       <div class="legend-item"><div class="semaforo sem-yellow"></div> &lt;20%</div>
       <div class="legend-item"><div class="semaforo sem-red"></div> ≥20%</div>
     </div>
-    <div class="areas-list">      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
-        <div class="area-counts">5/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+    <div class="areas-list">      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
+          <div class="area-counts">5/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
-        <div class="area-counts">8/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
+          <div class="area-counts">8/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
-        <div class="area-counts">7/16 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">43.8%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
+          <div class="area-counts">7/16 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">43.8%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
-        <div class="area-counts">6/14 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">42.9%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
+          <div class="area-counts">6/14 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">42.9%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
-        <div class="area-counts">2/9 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:22.2%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">22.2%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
+          <div class="area-counts">2/9 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:22.2%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">22.2%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-yellow"></div>
-        <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
-        <div class="area-counts">1/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
-        <div class="area-pct pct-yellow">12.5%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-yellow"></div>
+          <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
+          <div class="area-counts">1/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+          <div class="area-pct pct-yellow">12.5%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
-        <div class="area-counts">0/3 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
+          <div class="area-counts">0/3 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
-        <div class="area-counts">0/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
+          <div class="area-counts">0/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
-        <div class="area-counts">0/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
+          <div class="area-counts">0/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div></div>
   </div></div></div>
 <div id="segu_d2" class="tab-pane "><div class="summary-bar">
@@ -465,117 +607,181 @@
       <div class="legend-item"><div class="semaforo sem-yellow"></div> &lt;20%</div>
       <div class="legend-item"><div class="semaforo sem-red"></div> ≥20%</div>
     </div>
-    <div class="areas-list">      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
-        <div class="area-counts">5/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+    <div class="areas-list">      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
+          <div class="area-counts">5/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
-        <div class="area-counts">8/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
+          <div class="area-counts">8/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
-        <div class="area-counts">9/9 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
+          <div class="area-counts">9/9 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
-        <div class="area-counts">7/14 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:50.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">50.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
+          <div class="area-counts">7/14 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:50.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">50.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
-        <div class="area-counts">7/16 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">43.8%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
+          <div class="area-counts">7/16 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">43.8%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-yellow"></div>
-        <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
-        <div class="area-counts">1/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
-        <div class="area-pct pct-yellow">12.5%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-yellow"></div>
+          <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
+          <div class="area-counts">1/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+          <div class="area-pct pct-yellow">12.5%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
-        <div class="area-counts">0/3 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
+          <div class="area-counts">0/3 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
-        <div class="area-counts">0/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
+          <div class="area-counts">0/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
-        <div class="area-counts">0/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
+          <div class="area-counts">0/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div></div>
   </div></div></div>
 <div id="segu_d3" class="tab-pane "><div class="summary-bar">
@@ -609,117 +815,181 @@
       <div class="legend-item"><div class="semaforo sem-yellow"></div> &lt;20%</div>
       <div class="legend-item"><div class="semaforo sem-red"></div> ≥20%</div>
     </div>
-    <div class="areas-list">      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
-        <div class="area-counts">5/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+    <div class="areas-list">      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
+          <div class="area-counts">5/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
-        <div class="area-counts">8/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
+          <div class="area-counts">8/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
-        <div class="area-counts">7/16 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">43.8%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
+          <div class="area-counts">7/16 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">43.8%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
-        <div class="area-counts">6/14 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">42.9%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
+          <div class="area-counts">6/14 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">42.9%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
-        <div class="area-counts">2/9 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:22.2%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">22.2%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
+          <div class="area-counts">2/9 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:22.2%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">22.2%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-yellow"></div>
-        <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
-        <div class="area-counts">1/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
-        <div class="area-pct pct-yellow">12.5%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-yellow"></div>
+          <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
+          <div class="area-counts">1/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+          <div class="area-pct pct-yellow">12.5%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
-        <div class="area-counts">0/3 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
+          <div class="area-counts">0/3 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
-        <div class="area-counts">0/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
+          <div class="area-counts">0/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
-        <div class="area-counts">0/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
+          <div class="area-counts">0/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div></div>
   </div></div></div>
 <div id="segu_d4" class="tab-pane "><div class="summary-bar">
@@ -753,117 +1023,181 @@
       <div class="legend-item"><div class="semaforo sem-yellow"></div> &lt;20%</div>
       <div class="legend-item"><div class="semaforo sem-red"></div> ≥20%</div>
     </div>
-    <div class="areas-list">      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
-        <div class="area-counts">5/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+    <div class="areas-list">      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
+          <div class="area-counts">5/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
-        <div class="area-counts">8/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
+          <div class="area-counts">8/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
-        <div class="area-counts">9/9 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
+          <div class="area-counts">9/9 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
-        <div class="area-counts">7/16 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">43.8%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
+          <div class="area-counts">7/16 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">43.8%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
-        <div class="area-counts">6/14 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">42.9%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
+          <div class="area-counts">6/14 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">42.9%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-yellow"></div>
-        <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
-        <div class="area-counts">1/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
-        <div class="area-pct pct-yellow">12.5%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-yellow"></div>
+          <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
+          <div class="area-counts">1/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+          <div class="area-pct pct-yellow">12.5%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
-        <div class="area-counts">0/3 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
+          <div class="area-counts">0/3 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
-        <div class="area-counts">0/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
+          <div class="area-counts">0/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
-        <div class="area-counts">0/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
+          <div class="area-counts">0/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div></div>
   </div></div></div>
 <div id="segu_d5" class="tab-pane "><div class="summary-bar">
@@ -897,117 +1231,181 @@
       <div class="legend-item"><div class="semaforo sem-yellow"></div> &lt;20%</div>
       <div class="legend-item"><div class="semaforo sem-red"></div> ≥20%</div>
     </div>
-    <div class="areas-list">      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
-        <div class="area-counts">5/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+    <div class="areas-list">      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
+          <div class="area-counts">5/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
-        <div class="area-counts">8/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
+          <div class="area-counts">8/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
-        <div class="area-counts">9/9 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
+          <div class="area-counts">9/9 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
-        <div class="area-counts">7/16 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">43.8%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
+          <div class="area-counts">7/16 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">43.8%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
-        <div class="area-counts">6/14 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">42.9%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
+          <div class="area-counts">6/14 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">42.9%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-yellow"></div>
-        <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
-        <div class="area-counts">1/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
-        <div class="area-pct pct-yellow">12.5%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-yellow"></div>
+          <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
+          <div class="area-counts">1/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+          <div class="area-pct pct-yellow">12.5%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
-        <div class="area-counts">0/3 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
+          <div class="area-counts">0/3 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
-        <div class="area-counts">0/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
+          <div class="area-counts">0/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
-        <div class="area-counts">0/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
+          <div class="area-counts">0/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div></div>
   </div></div></div>
 <div id="segu_d6" class="tab-pane "><div class="summary-bar">
@@ -1041,117 +1439,181 @@
       <div class="legend-item"><div class="semaforo sem-yellow"></div> &lt;20%</div>
       <div class="legend-item"><div class="semaforo sem-red"></div> ≥20%</div>
     </div>
-    <div class="areas-list">      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
-        <div class="area-counts">5/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+    <div class="areas-list">      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3638 - CRANELOS">SP3638 - CRANELOS</div>
+          <div class="area-counts">5/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
-        <div class="area-counts">8/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">100.0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP2767 - Edificio Pinares del Este">SP2767 - Edificio Pinares del Este</div>
+          <div class="area-counts">8/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:100.0%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">100.0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
-        <div class="area-counts">7/16 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">43.8%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3975 - Cyros Schadlu">SP3975 - Cyros Schadlu</div>
+          <div class="area-counts">7/16 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:43.8%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">43.8%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
-        <div class="area-counts">6/14 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">42.9%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3245 - Palcos de Manantiales">SP3245 - Palcos de Manantiales</div>
+          <div class="area-counts">6/14 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:42.9%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">42.9%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-red"></div>
-        <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
-        <div class="area-counts">2/9 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:22.2%;background:#ef4444"></div></div>
-        <div class="area-pct pct-red">22.2%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-red"></div>
+          <div class="area-name" title="SP3987 - Ignacio Moro">SP3987 - Ignacio Moro</div>
+          <div class="area-counts">2/9 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:22.2%;background:#ef4444"></div></div>
+          <div class="area-pct pct-red">22.2%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-yellow"></div>
-        <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
-        <div class="area-counts">1/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
-        <div class="area-pct pct-yellow">12.5%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-yellow"></div>
+          <div class="area-name" title="SP2780 - Edificio Palcos de la posta">SP2780 - Edificio Palcos de la posta</div>
+          <div class="area-counts">1/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:12.5%;background:#f59e0b"></div></div>
+          <div class="area-pct pct-yellow">12.5%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3246 - LUZBEL">SP3246 - LUZBEL</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
-        <div class="area-counts">0/3 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2638 - LA CABAÑA DEL RIO S.A.">SP2638 - LA CABAÑA DEL RIO S.A.</div>
+          <div class="area-counts">0/3 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
-        <div class="area-counts">0/5 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3261 - DIAMANFIELD">SP3261 - DIAMANFIELD</div>
+          <div class="area-counts">0/5 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4045 - Rocio Raña, Alfero Nancy y Otros">SP4045 - Rocio Raña, Alfero Nancy y Otros</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
-        <div class="area-counts">0/17 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP2632 - BAFIRUS SA">SP2632 - BAFIRUS SA</div>
+          <div class="area-counts">0/17 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP4054 - Julio Fischer Requena">SP4054 - Julio Fischer Requena</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
-        <div class="area-counts">0/8 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP-4781 - EDIFICIO BALLENEROS">SP-4781 - EDIFICIO BALLENEROS</div>
+          <div class="area-counts">0/8 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3465 - TRIOPARK S.A.">SP3465 - TRIOPARK S.A.</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
-        <div class="area-counts">0/4 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3335 - Martin Yanguela">SP3335 - Martin Yanguela</div>
+          <div class="area-counts">0/4 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div>
-      <div class="area-row">
-        <div class="semaforo sem-green"></div>
-        <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
-        <div class="area-counts">0/6 off</div>
-        <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
-        <div class="area-pct pct-green">0%</div>
+      <div class="area-wrap">
+        <div class="area-row" style="" onclick="">
+          <div class="semaforo sem-green"></div>
+          <div class="area-name" title="SP3076 - Ester Campos">SP3076 - Ester Campos</div>
+          <div class="area-counts">0/6 off</div>
+          <div class="mini-bar"><div class="mfill" style="width:0.0%;background:#22c55e"></div></div>
+          <div class="area-pct pct-green">0%</div>
+          
+        </div>
+        
       </div></div>
   </div></div></div>
 <div class="footer">Datos al 06/03/2026 · Reporte automático Hik-Central Professional</div>
@@ -1161,6 +1623,13 @@ function showTab(id,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
+}
+function toggleCams(uid){
+  var p=document.getElementById('cams_'+uid);
+  var a=document.getElementById('arr_'+uid);
+  if(!p)return;
+  if(p.style.display==='block'){p.style.display='none';if(a)a.classList.remove('open');}
+  else{p.style.display='block';if(a)a.classList.add('open');}
 }
 </script>
 </body></html>

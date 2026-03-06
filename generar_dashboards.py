@@ -201,17 +201,19 @@ def leer_excel(ruta):
     m = re.search(r'(\d{8})', os.path.basename(ruta))
     fecha = datetime.strptime(m.group(1), '%Y%m%d').strftime('%d/%m/%Y') if m else datetime.today().strftime('%d/%m/%Y')
 
-    area_stats = defaultdict(lambda: {'total': 0, 'offline': 0, 'client': ''})
+    area_stats = defaultdict(lambda: {'total': 0, 'offline': 0, 'client': '', 'cameras': []})
     wb = openpyxl.load_workbook(ruta)
     ws = wb.active
     for i, row in enumerate(ws.iter_rows(values_only=True)):
         if i <= 8: continue
         area   = str(row[2]).strip() if row[2] else ''
         status = str(row[3]).strip() if row[3] else ''
+        nombre = str(row[1]).strip() if row[1] else ''
         client = classify(area)
         if client is None: continue
         area_stats[area]['total']  += 1
         area_stats[area]['client']  = client
+        area_stats[area]['cameras'].append({'nombre': nombre, 'offline': status == 'Offline'})
         if status == 'Offline':
             area_stats[area]['offline'] += 1
 
@@ -220,7 +222,8 @@ def leer_excel(ruta):
         pct = round(v['offline'] / v['total'] * 100, 1) if v['total'] else 0
         areas.append({
             'client': v['client'], 'area': area,
-            'offline': v['offline'], 'total': v['total'], 'pct': pct
+            'offline': v['offline'], 'total': v['total'], 'pct': pct,
+            'cameras': v['cameras']
         })
     return areas, fecha
 
@@ -233,15 +236,34 @@ def sem(pct):
     if pct < 20:  return ('sem-yellow', 'pct-yellow', '#f59e0b')
     return              ('sem-red',    'pct-red',    '#ef4444')
 
-def area_row(a):
+def area_row(a, show_cameras=False):
     sc, pc, bc = sem(a['pct'])
     pct_str = f"{a['pct']}%" if a['pct'] > 0 else "0%"
-    return f"""      <div class="area-row">
-        <div class="semaforo {sc}"></div>
-        <div class="area-name" title="{a['area']}">{a['area']}</div>
-        <div class="area-counts">{a['offline']}/{a['total']} off</div>
-        <div class="mini-bar"><div class="mfill" style="width:{min(a['pct'],100)}%;background:{bc}"></div></div>
-        <div class="area-pct {pc}">{pct_str}</div>
+    import re as _re
+    uid = _re.sub(r'[^a-z0-9]', '_', a['area'].lower())[:30]
+
+    cam_panel = ''
+    cursor = ''
+    if show_cameras and a.get('cameras'):
+        cams_sorted = sorted(a['cameras'], key=lambda c: (0 if c['offline'] else 1, c['nombre']))
+        cam_items = ''.join(
+            f'<div class="cam-item"><div class="cam-dot {"cam-off" if c["offline"] else "cam-on"}"></div>'
+            f'<span class="cam-name {"cam-name-off" if c["offline"] else ""}">{ c["nombre"]}</span></div>'
+            for c in cams_sorted
+        )
+        cam_panel = f'<div class="cam-panel" id="cams_{uid}">{cam_items}</div>'
+        cursor = 'cursor:pointer;'
+
+    return f"""      <div class="area-wrap">
+        <div class="area-row" style="{cursor}" onclick="{'toggleCams(\'' + uid + '\')' if show_cameras and a.get('cameras') else ''}">
+          <div class="semaforo {sc}"></div>
+          <div class="area-name" title="{a['area']}">{a['area']}</div>
+          <div class="area-counts">{a['offline']}/{a['total']} off</div>
+          <div class="mini-bar"><div class="mfill" style="width:{min(a['pct'],100)}%;background:{bc}"></div></div>
+          <div class="area-pct {pc}">{pct_str}</div>
+          {'<span class="cam-arrow" id="arr_'+uid+'">▶</span>' if show_cameras and a.get('cameras') else ''}
+        </div>
+        {cam_panel}
       </div>"""
 
 CSS = """
@@ -323,6 +345,20 @@ CSS = """
   .hist-date{font-size:0.62rem;color:#445;text-align:center;white-space:nowrap}
   .hist-pct{font-size:0.68rem;font-weight:700;text-align:center}
   .footer{text-align:center;padding:14px;color:#445;font-size:0.75rem}
+  /* -- Camara dropdown -- */
+  .area-wrap{display:flex;flex-direction:column}
+  .cam-arrow{font-size:0.7rem;color:#556;margin-left:4px;transition:transform .2s;flex-shrink:0}
+  .cam-arrow.open{transform:rotate(90deg);color:#4a9eff}
+  .cam-panel{display:none;padding:6px 12px 8px 36px;background:#0d1220;
+    border-left:2px solid #1a2e50;margin:0 0 4px 0;border-radius:0 0 6px 6px}
+  .cam-item{display:flex;align-items:center;gap:7px;padding:3px 0;
+    border-bottom:1px solid #131826}
+  .cam-item:last-child{border-bottom:none}
+  .cam-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .cam-on{background:#22c55e;box-shadow:0 0 5px #22c55e88}
+  .cam-off{background:#ef4444;box-shadow:0 0 5px #ef444488}
+  .cam-name{font-size:0.75rem;color:#aab}
+  .cam-name-off{color:#ef4444}
   @media(max-width:900px){.clients-grid{grid-template-columns:1fr}.tab-bar{padding:10px 16px 0}}
 """
 
@@ -333,17 +369,24 @@ function showTab(id,btn){
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 }
+function toggleCams(uid){
+  var p=document.getElementById('cams_'+uid);
+  var a=document.getElementById('arr_'+uid);
+  if(!p)return;
+  if(p.style.display==='block'){p.style.display='none';if(a)a.classList.remove('open');}
+  else{p.style.display='block';if(a)a.classList.add('open');}
+}
 </script>"""
 
 # ─────────────────────────────────────────────
 #  build_panel — igual que el original
 # ─────────────────────────────────────────────
-def build_panel(label, hdr_color, subset):
+def build_panel(label, hdr_color, subset, show_cameras=False):
     total   = sum(a['total']   for a in subset)
     offline = sum(a['offline'] for a in subset)
     online  = total - offline
     pct     = round(offline / total * 100, 1) if total else 0
-    rows    = '\n'.join(area_row(a) for a in sorted(subset, key=lambda x: -x['pct']))
+    rows    = '\n'.join(area_row(a, show_cameras) for a in sorted(subset, key=lambda x: -x['pct']))
     return f"""  <div class="client-panel">
     <div class="client-header" style="background:linear-gradient(135deg,{hdr_color},#1a1f2e)">
       <div>
@@ -443,7 +486,7 @@ def build_dashboard(titulo, logo_txt, logo_color, sub_label,
             extra_cards += f'  <div class="s-card" style="border-color:{color};margin-left:6px"><div class="lbl">{short}</div><div class="val" style="color:{color}">{t}</div><div class="sub">{o} offline ({p}%)</div></div>\n'
 
         panels_html = '\n'.join(
-            build_panel(lbl, color, [a for a in areas if a['client'] in cl_keys])
+            build_panel(lbl, color, [a for a in areas if a['client'] in cl_keys], show_cameras=is_today)
             for cl_keys, lbl, color in panels_config
             if any(a['client'] in cl_keys for a in areas)
         )
