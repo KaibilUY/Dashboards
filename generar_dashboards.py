@@ -208,12 +208,13 @@ def leer_excel(ruta):
         if i <= 8: continue
         area   = str(row[2]).strip() if row[2] else ''
         status = str(row[3]).strip() if row[3] else ''
-        nombre = str(row[0]).strip() if row[0] else ''  # columna A = nombre camara
+        nombre  = str(row[0]).strip() if row[0] else ''  # columna A = nombre camara
+        address = str(row[1]).strip() if row[1] else ''  # columna B = direccion
         client = classify(area)
         if client is None: continue
         area_stats[area]['total']  += 1
         area_stats[area]['client']  = client
-        area_stats[area]['cameras'].append({'nombre': nombre, 'offline': status == 'Offline'})
+        area_stats[area]['cameras'].append({'nombre': nombre, 'address': address, 'offline': status == 'Offline'})
         if status == 'Offline':
             area_stats[area]['offline'] += 1
 
@@ -248,7 +249,9 @@ def area_row(a, show_cameras=False):
         cams_sorted = sorted(a['cameras'], key=lambda c: (0 if c['offline'] else 1, c['nombre']))
         cam_items = ''.join(
             f'<div class="cam-item"><div class="cam-dot {"cam-off" if c["offline"] else "cam-on"}"></div>'
-            f'<span class="cam-name {"cam-name-off" if c["offline"] else ""}">{ c["nombre"]}</span></div>'
+            f'<span class="cam-name {"cam-name-off" if c["offline"] else ""}">{c["nombre"]}'
+            f'<span class="cam-addr"> · {c["address"]}</span></span>'
+            f'</div>'
             for c in cams_sorted
         )
         cam_panel = f'<div class="cam-panel" id="cams_{uid}">{cam_items}</div>'
@@ -357,8 +360,9 @@ CSS = """
   .cam-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
   .cam-on{background:#22c55e;box-shadow:0 0 5px #22c55e88}
   .cam-off{background:#ef4444;box-shadow:0 0 5px #ef444488}
-  .cam-name{font-size:0.75rem;color:#aab}
+  .cam-name{font-size:0.75rem;color:#aab;line-height:1.5}
   .cam-name-off{color:#ef4444}
+  .cam-addr{font-size:0.68rem;color:#556;font-family:monospace;margin-left:2px}
   @media(max-width:900px){.clients-grid{grid-template-columns:1fr}.tab-bar{padding:10px 16px 0}}
 """
 
