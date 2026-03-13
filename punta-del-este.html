@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Segura Punta del Este — Dashboard Cámaras</title><style>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Segura Punta del Este — Dashboard Cámaras</title>
+<style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;min-height:100vh}
 .top-bar{background:linear-gradient(135deg,#1a1f2e,#232a3e);padding:18px 32px;
@@ -12,7 +14,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
 .manual-badge{display:inline-block;background:#f59e0b22;color:#f59e0b;
  border:1px solid #f59e0b55;border-radius:6px;padding:3px 10px;
  font-size:0.75rem;font-weight:700;margin-left:10px;vertical-align:middle}
-/* ── Tabs ── */
 .tab-bar{display:flex;gap:4px;padding:10px 32px 0;background:#13172a;
  border-bottom:2px solid #2d3550;flex-wrap:wrap}
 .tab-btn{padding:8px 16px;border:none;border-radius:8px 8px 0 0;cursor:pointer;
@@ -22,7 +23,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
 .tab-btn:hover:not(.active){background:#1a1f2e;color:#cde}
 .tab-btn.manual{color:#f59e0b}
 .tab-pane{display:none}.tab-pane.active{display:block}
-/* ── Summary ── */
 .summary-bar{display:flex;gap:16px;padding:20px 32px;background:#13172a;
  border-bottom:1px solid #2d3550;flex-wrap:wrap}
 .s-card{flex:1;min-width:130px;background:#1a1f2e;border-radius:10px;
@@ -37,7 +37,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
 .dot-red{background:#ef4444;box-shadow:0 0 8px #ef444499}
 .dot-yellow{background:#f59e0b;box-shadow:0 0 8px #f59e0b99}
 .dot-green{background:#22c55e;box-shadow:0 0 8px #22c55e99}
-/* ── Grid ── */
 .clients-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));
  gap:22px;padding:22px 32px 32px}
 .client-panel{background:#1a1f2e;border-radius:14px;overflow:hidden;border:1px solid #2d3550}
@@ -69,7 +68,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
 .pct-red{color:#ef4444}.pct-yellow{color:#f59e0b}.pct-green{color:#22c55e}
 .mini-bar{width:65px;background:#0f1117;border-radius:3px;height:5px;flex-shrink:0}
 .mini-bar .mfill{height:100%;border-radius:3px}
-/* ── Sparkbars ── */
 .hist-section{padding:18px 32px 8px}
 .hist-title{font-size:0.78rem;font-weight:700;color:#556;text-transform:uppercase;
  letter-spacing:1px;margin-bottom:12px}
@@ -85,7 +83,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
 .hist-bar-bg.manual-bar{border-color:#f59e0b55}
 .hist-date.manual-date{color:#f59e0b99}
 .footer{text-align:center;padding:14px;color:#445;font-size:0.75rem}
-/* ── Camera dropdown ── */
 .area-wrap{display:flex;flex-direction:column}
 .cam-arrow{font-size:0.7rem;color:#556;margin-left:4px;transition:transform .2s;flex-shrink:0}
 .cam-arrow.open{transform:rotate(90deg);color:#4a9eff}
@@ -100,7 +97,64 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
 .cam-name-off{color:#ef4444}
 .cam-addr{font-size:0.68rem;color:#556;font-family:monospace;margin-left:2px}
 @media(max-width:900px){.clients-grid{grid-template-columns:1fr}.tab-bar{padding:10px 16px 0}}
+
+/* ── Auth overlay ── */
+#auth-overlay{position:fixed;inset:0;background:#0f1117;z-index:9999;
+  display:flex;align-items:center;justify-content:center}
+.auth-box{background:#1a1f2e;border:1px solid #2d3550;border-radius:16px;
+  padding:44px 48px;display:flex;flex-direction:column;align-items:center;gap:20px;
+  box-shadow:0 8px 40px #00000088;min-width:320px}
+.auth-logo{font-size:2rem;font-weight:900;letter-spacing:3px}
+.auth-sub{font-size:0.82rem;color:#556;letter-spacing:1px;margin-top:-12px}
+.auth-label{font-size:0.78rem;color:#8899bb;align-self:flex-start}
+.auth-input{width:100%;background:#0f1117;border:1px solid #2d3550;border-radius:8px;
+  padding:10px 14px;color:#e0e0e0;font-size:0.95rem;outline:none;transition:border .2s}
+.auth-input:focus{border-color:#4a9eff}
+.auth-btn{width:100%;background:#1a3a6e;color:#fff;border:none;border-radius:8px;
+  padding:11px;font-size:0.9rem;font-weight:700;cursor:pointer;letter-spacing:1px;
+  transition:background .2s}
+.auth-btn:hover{background:#2a5aae}
+.auth-err{color:#ef4444;font-size:0.78rem;display:none;margin-top:-8px}
 </style></head><body>
+
+<div id="auth-overlay">
+  <div class="auth-box">
+    <div class="auth-logo" style="color:#4a9eff">SEGURA</div>
+    <div class="auth-sub">Punta del Este</div>
+    <div class="auth-label">Contraseña de acceso</div>
+    <input id="auth-pwd" class="auth-input" type="password"
+           placeholder="••••••••••" onkeydown="if(event.key==='Enter')checkAuth()">
+    <button class="auth-btn" onclick="checkAuth()">INGRESAR</button>
+    <span class="auth-err" id="auth-err">Contraseña incorrecta</span>
+  </div>
+</div>
+<script>
+(function(){
+  var SK='auth_pde';
+  var HASH='4953cc2b28a1d908c1a19fd082254c78e60eb3e3e195aa7bfd951c0bdb1068b0';
+  if(sessionStorage.getItem(SK)==='1'){
+    document.getElementById('auth-overlay').style.display='none';return;
+  }
+  async function sha256(s){
+    var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+  }
+  window.checkAuth=async function(){
+    var h=await sha256(document.getElementById('auth-pwd').value);
+    if(h===HASH){
+      sessionStorage.setItem(SK,'1');
+      document.getElementById('auth-overlay').style.display='none';
+    }else{
+      var e=document.getElementById('auth-err');
+      e.style.display='block';
+      document.getElementById('auth-pwd').value='';
+      document.getElementById('auth-pwd').style.borderColor='#ef4444';
+      setTimeout(function(){e.style.display='none';
+        document.getElementById('auth-pwd').style.borderColor='#2d3550';},2500);
+    }
+  };
+})();
+</script>
 <div class="top-bar">
  <div>
   <div class="logo" style="color:#4a9eff">SEGURA</div>
@@ -109,14 +163,18 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
  </div>
  <h1>Monitor de Disponibilidad</h1>
 </div>
-<div class="tab-bar">
-<button class="tab-btn active" onclick="showTab('segu_d0',this)">Hoy 13/3</button><button class="tab-btn " onclick="showTab('segu_d1',this)">12/3</button><button class="tab-btn " onclick="showTab('segu_d2',this)">11/3</button><button class="tab-btn  manual" onclick="showTab('segu_d3',this)">10/3 📷</button><button class="tab-btn " onclick="showTab('segu_d4',this)">9/3</button><button class="tab-btn " onclick="showTab('segu_d5',this)">8/3</button><button class="tab-btn " onclick="showTab('segu_d6',this)">7/3</button>
-</div>
+<div class="tab-bar"><button class="tab-btn active" onclick="showTab('segu_d0',this)">Hoy 13/3</button><button class="tab-btn " onclick="showTab('segu_d1',this)">12/3</button><button class="tab-btn " onclick="showTab('segu_d2',this)">11/3</button><button class="tab-btn  manual" onclick="showTab('segu_d3',this)">10/3 📷</button><button class="tab-btn " onclick="showTab('segu_d4',this)">9/3</button><button class="tab-btn " onclick="showTab('segu_d5',this)">8/3</button><button class="tab-btn " onclick="showTab('segu_d6',this)">7/3</button></div>
 <div id="segu_d0" class="tab-pane active">
 <div class="summary-bar">
- <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div><div class="val" style="color:#4a9eff">134</div><div class="sub">16 áreas</div></div>
- <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">105</div><div class="sub">78.4% disponibles</div></div>
- <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">29</div><div class="sub">21.6% fuera de línea</div></div>
+ <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div>
+  <div class="val" style="color:#4a9eff">134</div>
+  <div class="sub">16 áreas</div></div>
+ <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div>
+  <div class="val" style="color:#22c55e">105</div>
+  <div class="sub">78.4% disponibles</div></div>
+ <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div>
+  <div class="val" style="color:#ef4444">29</div>
+  <div class="sub">21.6% fuera de línea</div></div>
   <div class="s-card" style="border-color:#1a3a7e;margin-left:6px"><div class="lbl">Segura Punta del Este</div><div class="val" style="color:#1a3a7e">134</div><div class="sub">29 offline (21.6%)</div></div>
 
 </div>
@@ -131,55 +189,55 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
  <div class="hist-row">
   <div class="hist-label" style="color:#1a3a7e">Segura Punta del Este</div>
   <div class="hist-bars">
- <div class="hist-bar-wrap">
-  <div class="hist-bar-bg">
-   <div class="hist-bar-fill" style="height:56.8%;background:#ef4444"></div>
+  <div class="hist-bar-wrap">
+   <div class="hist-bar-bg">
+    <div class="hist-bar-fill" style="height:56.8%;background:#ef4444"></div>
+   </div>
+   <div class="hist-pct" style="color:#ef4444">28.4%</div>
+   <div class="hist-date">7/3</div>
   </div>
-  <div class="hist-pct" style="color:#ef4444">28.4%</div>
-  <div class="hist-date">7/3</div>
- </div>
- <div class="hist-bar-wrap">
-  <div class="hist-bar-bg">
-   <div class="hist-bar-fill" style="height:43.2%;background:#ef4444"></div>
+  <div class="hist-bar-wrap">
+   <div class="hist-bar-bg">
+    <div class="hist-bar-fill" style="height:43.2%;background:#ef4444"></div>
+   </div>
+   <div class="hist-pct" style="color:#ef4444">21.6%</div>
+   <div class="hist-date">8/3</div>
   </div>
-  <div class="hist-pct" style="color:#ef4444">21.6%</div>
-  <div class="hist-date">8/3</div>
- </div>
- <div class="hist-bar-wrap">
-  <div class="hist-bar-bg">
-   <div class="hist-bar-fill" style="height:53.8%;background:#ef4444"></div>
+  <div class="hist-bar-wrap">
+   <div class="hist-bar-bg">
+    <div class="hist-bar-fill" style="height:53.8%;background:#ef4444"></div>
+   </div>
+   <div class="hist-pct" style="color:#ef4444">26.9%</div>
+   <div class="hist-date">9/3</div>
   </div>
-  <div class="hist-pct" style="color:#ef4444">26.9%</div>
-  <div class="hist-date">9/3</div>
- </div>
- <div class="hist-bar-wrap">
-  <div class="hist-bar-bg manual-bar">
-   <div class="hist-bar-fill" style="height:53.8%;background:#ef4444"></div>
+  <div class="hist-bar-wrap">
+   <div class="hist-bar-bg manual-bar">
+    <div class="hist-bar-fill" style="height:53.8%;background:#ef4444"></div>
+   </div>
+   <div class="hist-pct" style="color:#ef4444">26.9%</div>
+   <div class="hist-date manual-date">10/3 📷</div>
   </div>
-  <div class="hist-pct" style="color:#ef4444">26.9%</div>
-  <div class="hist-date manual-date">10/3 📷</div>
- </div>
- <div class="hist-bar-wrap">
-  <div class="hist-bar-bg">
-   <div class="hist-bar-fill" style="height:55.2%;background:#ef4444"></div>
+  <div class="hist-bar-wrap">
+   <div class="hist-bar-bg">
+    <div class="hist-bar-fill" style="height:55.2%;background:#ef4444"></div>
+   </div>
+   <div class="hist-pct" style="color:#ef4444">27.6%</div>
+   <div class="hist-date">11/3</div>
   </div>
-  <div class="hist-pct" style="color:#ef4444">27.6%</div>
-  <div class="hist-date">11/3</div>
- </div>
- <div class="hist-bar-wrap">
-  <div class="hist-bar-bg">
-   <div class="hist-bar-fill" style="height:43.2%;background:#ef4444"></div>
+  <div class="hist-bar-wrap">
+   <div class="hist-bar-bg">
+    <div class="hist-bar-fill" style="height:43.2%;background:#ef4444"></div>
+   </div>
+   <div class="hist-pct" style="color:#ef4444">21.6%</div>
+   <div class="hist-date">12/3</div>
   </div>
-  <div class="hist-pct" style="color:#ef4444">21.6%</div>
-  <div class="hist-date">12/3</div>
- </div>
- <div class="hist-bar-wrap">
-  <div class="hist-bar-bg">
-   <div class="hist-bar-fill" style="height:43.2%;background:#ef4444"></div>
-  </div>
-  <div class="hist-pct" style="color:#ef4444">21.6%</div>
-  <div class="hist-date">13/3</div>
- </div></div>
+  <div class="hist-bar-wrap">
+   <div class="hist-bar-bg">
+    <div class="hist-bar-fill" style="height:43.2%;background:#ef4444"></div>
+   </div>
+   <div class="hist-pct" style="color:#ef4444">21.6%</div>
+   <div class="hist-date">13/3</div>
+  </div></div>
  </div>
 </div>
 <div class="clients-grid">
@@ -395,9 +453,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
  </div></div>
  </div></div></div><div id="segu_d1" class="tab-pane ">
 <div class="summary-bar">
- <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div><div class="val" style="color:#4a9eff">134</div><div class="sub">16 áreas</div></div>
- <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">105</div><div class="sub">78.4% disponibles</div></div>
- <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">29</div><div class="sub">21.6% fuera de línea</div></div>
+ <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div>
+  <div class="val" style="color:#4a9eff">134</div>
+  <div class="sub">16 áreas</div></div>
+ <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div>
+  <div class="val" style="color:#22c55e">105</div>
+  <div class="sub">78.4% disponibles</div></div>
+ <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div>
+  <div class="val" style="color:#ef4444">29</div>
+  <div class="sub">21.6% fuera de línea</div></div>
   <div class="s-card" style="border-color:#1a3a7e;margin-left:6px"><div class="lbl">Segura Punta del Este</div><div class="val" style="color:#1a3a7e">134</div><div class="sub">29 offline (21.6%)</div></div>
 
 </div>
@@ -620,9 +684,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
  </div></div>
  </div></div></div><div id="segu_d2" class="tab-pane ">
 <div class="summary-bar">
- <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div><div class="val" style="color:#4a9eff">134</div><div class="sub">16 áreas</div></div>
- <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">97</div><div class="sub">72.4% disponibles</div></div>
- <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">37</div><div class="sub">27.6% fuera de línea</div></div>
+ <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div>
+  <div class="val" style="color:#4a9eff">134</div>
+  <div class="sub">16 áreas</div></div>
+ <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div>
+  <div class="val" style="color:#22c55e">97</div>
+  <div class="sub">72.4% disponibles</div></div>
+ <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div>
+  <div class="val" style="color:#ef4444">37</div>
+  <div class="sub">27.6% fuera de línea</div></div>
   <div class="s-card" style="border-color:#1a3a7e;margin-left:6px"><div class="lbl">Segura Punta del Este</div><div class="val" style="color:#1a3a7e">134</div><div class="sub">37 offline (27.6%)</div></div>
 
 </div>
@@ -845,9 +915,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
  </div></div>
  </div></div></div><div id="segu_d3" class="tab-pane "><div style="background:#f59e0b22;border:1px solid #f59e0b55;border-radius:8px;padding:10px 32px;margin:10px 32px 0;font-size:0.82rem;color:#f59e0b">📷 Datos de reporte manual exportado el 10/03/2026</div>
 <div class="summary-bar">
- <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div><div class="val" style="color:#4a9eff">134</div><div class="sub">16 áreas</div></div>
- <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">98</div><div class="sub">73.1% disponibles</div></div>
- <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">36</div><div class="sub">26.9% fuera de línea</div></div>
+ <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div>
+  <div class="val" style="color:#4a9eff">134</div>
+  <div class="sub">16 áreas</div></div>
+ <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div>
+  <div class="val" style="color:#22c55e">98</div>
+  <div class="sub">73.1% disponibles</div></div>
+ <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div>
+  <div class="val" style="color:#ef4444">36</div>
+  <div class="sub">26.9% fuera de línea</div></div>
   <div class="s-card" style="border-color:#1a3a7e;margin-left:6px"><div class="lbl">Segura Punta del Este</div><div class="val" style="color:#1a3a7e">134</div><div class="sub">36 offline (26.9%)</div></div>
 
 </div>
@@ -1070,9 +1146,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
  </div></div>
  </div></div></div><div id="segu_d4" class="tab-pane ">
 <div class="summary-bar">
- <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div><div class="val" style="color:#4a9eff">134</div><div class="sub">16 áreas</div></div>
- <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">98</div><div class="sub">73.1% disponibles</div></div>
- <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">36</div><div class="sub">26.9% fuera de línea</div></div>
+ <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div>
+  <div class="val" style="color:#4a9eff">134</div>
+  <div class="sub">16 áreas</div></div>
+ <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div>
+  <div class="val" style="color:#22c55e">98</div>
+  <div class="sub">73.1% disponibles</div></div>
+ <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div>
+  <div class="val" style="color:#ef4444">36</div>
+  <div class="sub">26.9% fuera de línea</div></div>
   <div class="s-card" style="border-color:#1a3a7e;margin-left:6px"><div class="lbl">Segura Punta del Este</div><div class="val" style="color:#1a3a7e">134</div><div class="sub">36 offline (26.9%)</div></div>
 
 </div>
@@ -1295,9 +1377,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
  </div></div>
  </div></div></div><div id="segu_d5" class="tab-pane ">
 <div class="summary-bar">
- <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div><div class="val" style="color:#4a9eff">134</div><div class="sub">16 áreas</div></div>
- <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">105</div><div class="sub">78.4% disponibles</div></div>
- <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">29</div><div class="sub">21.6% fuera de línea</div></div>
+ <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div>
+  <div class="val" style="color:#4a9eff">134</div>
+  <div class="sub">16 áreas</div></div>
+ <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div>
+  <div class="val" style="color:#22c55e">105</div>
+  <div class="sub">78.4% disponibles</div></div>
+ <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div>
+  <div class="val" style="color:#ef4444">29</div>
+  <div class="sub">21.6% fuera de línea</div></div>
   <div class="s-card" style="border-color:#1a3a7e;margin-left:6px"><div class="lbl">Segura Punta del Este</div><div class="val" style="color:#1a3a7e">134</div><div class="sub">29 offline (21.6%)</div></div>
 
 </div>
@@ -1520,9 +1608,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
  </div></div>
  </div></div></div><div id="segu_d6" class="tab-pane ">
 <div class="summary-bar">
- <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div><div class="val" style="color:#4a9eff">134</div><div class="sub">16 áreas</div></div>
- <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div><div class="val" style="color:#22c55e">96</div><div class="sub">71.6% disponibles</div></div>
- <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div><div class="val" style="color:#ef4444">38</div><div class="sub">28.4% fuera de línea</div></div>
+ <div class="s-card" style="border-color:#4a9eff"><div class="lbl">Total Cámaras</div>
+  <div class="val" style="color:#4a9eff">134</div>
+  <div class="sub">16 áreas</div></div>
+ <div class="s-card" style="border-color:#22c55e"><div class="lbl">Online</div>
+  <div class="val" style="color:#22c55e">96</div>
+  <div class="sub">71.6% disponibles</div></div>
+ <div class="s-card" style="border-color:#ef4444"><div class="lbl">Offline</div>
+  <div class="val" style="color:#ef4444">38</div>
+  <div class="sub">28.4% fuera de línea</div></div>
   <div class="s-card" style="border-color:#1a3a7e;margin-left:6px"><div class="lbl">Segura Punta del Este</div><div class="val" style="color:#1a3a7e">134</div><div class="sub">38 offline (28.4%)</div></div>
 
 </div>
@@ -1747,17 +1841,17 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0f1117;color:#e0e0e0;mi
 <div class="footer">Datos al 13/03/2026 · Reporte automático Hik-Central Professional</div>
 <script>
 function showTab(id,btn){
- document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
- document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- btn.classList.add('active');
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
 }
 function toggleCams(uid){
- var p=document.getElementById('cams_'+uid);
- var a=document.getElementById('arr_'+uid);
- if(!p)return;
- if(p.style.display==='block'){p.style.display='none';if(a)a.classList.remove('open');}
- else{p.style.display='block';if(a)a.classList.add('open');}
+  var p=document.getElementById('cams_'+uid);
+  var a=document.getElementById('arr_'+uid);
+  if(!p)return;
+  if(p.style.display==='block'){p.style.display='none';if(a)a.classList.remove('open');}
+  else{p.style.display='block';if(a)a.classList.add('open');}
 }
 </script>
 </body></html>
