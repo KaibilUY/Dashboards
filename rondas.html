@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaibil — Rondas en Tiempo Real</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #111720;
+    --border: #1e2d3d;
+    --text: #cdd6f4;
+    --muted: #6b7a99;
+    --verde: #22c55e;
+    --amarillo: #eab308;
+    --rojo: #ef4444;
+    --negro: #475569;
+    --azul: #2563eb;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* LOGIN */
+  #login-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2.5rem 3rem;
+    width: 360px;
+  }
+
+  .login-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .login-logo .k {
+    width: 36px;
+    height: 36px;
+    background: var(--azul);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  .login-logo span {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .login-box label {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .login-box input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 10px 12px;
+    outline: none;
+    margin-bottom: 1.2rem;
+  }
+
+  .login-box input:focus { border-color: var(--azul); }
+
+  .login-box button {
+    width: 100%;
+    background: var(--azul);
+    color: white;
+    border: none;
+    padding: 11px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .login-box button:hover { background: #1d4ed8; }
+  .login-error { color: var(--rojo); font-size: 12px; margin-top: 10px; font-family: var(--font-mono); display: none; }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-logo {
+    width: 28px;
+    height: 28px;
+    background: var(--azul);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .header-title {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .header-subtitle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--verde);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  #last-update {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* LAYOUT PRINCIPAL */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .sidebar-section {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .sidebar-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* CONTADORES */
+  .counters {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 6px;
+  }
+
+  .counter {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 8px 6px;
+    text-align: center;
+  }
+
+  .counter-num {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .counter-label {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .c-verde { color: var(--verde); }
+  .c-amarillo { color: var(--amarillo); }
+  .c-rojo { color: var(--rojo); }
+  .c-negro { color: var(--negro); }
+
+  /* LISTA PUNTOS */
+  .puntos-list {
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .punto-item {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    transition: background 0.15s;
+  }
+
+  .punto-item:hover { background: rgba(37, 99, 235, 0.08); }
+
+  .punto-semaforo {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .punto-info { flex: 1; min-width: 0; }
+
+  .punto-nombre {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .punto-barrio {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    margin-top: 1px;
+  }
+
+  .punto-tiempo {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* MAPA */
+  #map {
+    flex: 1;
+    background: #0d1117;
+  }
+
+  /* LEAFLET CUSTOM */
+  .leaflet-container { background: #0d1117; }
+
+  .punto-marker {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  }
+
+  .movil-marker {
+    width: 28px;
+    height: 28px;
+    background: var(--azul);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 0 12px rgba(37,99,235,0.6);
+  }
+
+  .leaflet-popup-content-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    color: var(--text);
+  }
+
+  .leaflet-popup-tip { background: var(--surface); }
+
+  .popup-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .popup-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  .popup-val { color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="k">K</div>
+      <span>Kaibil Security</span>
+    </div>
+    <label>Contraseña</label>
+    <input type="password" id="pwd-input" placeholder="••••••••••" onkeydown="if(event.key==='Enter')checkPwd()">
+    <button onclick="checkPwd()">Ingresar</button>
+    <div class="login-error" id="login-error">Contraseña incorrecta</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <div class="header-logo">K</div>
+    <div>
+      <div class="header-title">Rondas en tiempo real</div>
+      <div class="header-subtitle">Puntos de control · GPS Móviles</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-badge">
+      <div class="status-dot"></div>
+      <span>En vivo</span>
+    </div>
+    <div id="last-update">—</div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Estado general</div>
+      <div class="counters">
+        <div class="counter">
+          <div class="counter-num c-verde" id="cnt-verde">—</div>
+          <div class="counter-label">Verde</div>
+        </div>
+        <div class="counter">
+          <div class="counter-num c-amarillo" id="cnt-amarillo">—</div>
+          <div class="counter-label">Amarillo</div>
+        </div>
+        <div class="counter">
+          <div class="counter-num c-rojo" id="cnt-rojo">—</div>
+          <div class="counter-label">Rojo</div>
+        </div>
+        <div class="counter">
+          <div class="counter-num c-negro" id="cnt-negro">—</div>
+          <div class="counter-label">Negro</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section" style="padding-bottom:12px">
+      <div class="sidebar-label">Puntos de control</div>
+    </div>
+
+    <div class="puntos-list" id="puntos-list">
+      <div style="padding:20px;font-family:var(--font-mono);font-size:11px;color:var(--muted);">Cargando...</div>
+    </div>
+  </div>
+
+  <!-- MAPA -->
+  <div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ─── CONFIGURACIÓN ────────────────────────────────────────────────────────────
+
+const PWD_HASH = "4f1f81565875bfb546ce204acb7953474faf941d36076fd4f9eeef4d08784de0"; // K@ibil2@26
+const CSV_SEMAFORO = "https://drive.google.com/uc?export=download&id=1_72lWUbaxgYSCAgsVsBK6zF7_aINCNO8";
+const CSV_MOVILES  = "https://drive.google.com/uc?export=download&id=1R_TBA992emV_mzR2XJEoBIeLYl5kEe0g";
+const REFRESH_MS   = 5 * 60 * 1000; // 5 minutos
+
+const COLORES = {
+  verde:    "#22c55e",
+  amarillo: "#eab308",
+  rojo:     "#ef4444",
+  negro:    "#475569",
+};
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
+
+async function checkPwd() {
+  const val = document.getElementById("pwd-input").value;
+  const hash = await sha256(val);
+  if (hash === PWD_HASH) {
+    document.getElementById("login-overlay").style.display = "none";
+    initApp();
+  } else {
+    document.getElementById("login-error").style.display = "block";
+    document.getElementById("pwd-input").value = "";
+  }
+}
+
+// ─── PARSE CSV ────────────────────────────────────────────────────────────────
+
+function parseCSV(text) {
+  const lines = text.trim().split("\n");
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(",");
+  return lines.slice(1).map(line => {
+    const vals = line.split(",");
+    const obj = {};
+    headers.forEach((h, i) => obj[h.trim()] = (vals[i] || "").trim());
+    return obj;
+  });
+}
+
+async function fetchCSV(url) {
+  // Usar corsproxy para evitar bloqueo CORS de Drive
+  const proxy = "https://corsproxy.io/?" + encodeURIComponent(url);
+  try {
+    const r = await fetch(proxy);
+    return await r.text();
+  } catch(e) {
+    console.error("Error fetching CSV:", e);
+    return "";
+  }
+}
+
+// ─── MAPA ────────────────────────────────────────────────────────────────────
+
+let map, layerPuntos, layerMoviles;
+
+function initMap() {
+  map = L.map("map", {
+    center: [-34.874, -56.050],
+    zoom: 15,
+    zoomControl: true,
+  });
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap",
+    className: "map-tiles"
+  }).addTo(map);
+
+  layerPuntos  = L.layerGroup().addTo(map);
+  layerMoviles = L.layerGroup().addTo(map);
+}
+
+function tiempoTranscurrido(timestamp) {
+  if (!timestamp || timestamp === "None" || timestamp === "") return "Sin datos";
+  try {
+    const dt = new Date(timestamp.replace(" ", "T") + "-03:00");
+    const diff = Math.floor((Date.now() - dt) / 60000);
+    if (diff < 1) return "Ahora mismo";
+    if (diff < 60) return `Hace ${diff} min`;
+    const h = Math.floor(diff / 60);
+    const m = diff % 60;
+    return `Hace ${h}h ${m}m`;
+  } catch(e) { return timestamp; }
+}
+
+function renderPuntos(puntos) {
+  layerPuntos.clearLayers();
+  const lista = document.getElementById("puntos-list");
+  lista.innerHTML = "";
+
+  let cVerde = 0, cAmarillo = 0, cRojo = 0, cNegro = 0;
+
+  puntos.forEach(p => {
+    const lat = parseFloat(p.nombre); // nombre no, necesitamos lat
+    // Campos del CSV: nombre,barrio,ventana_minutos,ultimo_evento,estado,generado
+    const estado = (p.estado || "negro").toLowerCase();
+    const color = COLORES[estado] || COLORES.negro;
+
+    if (estado === "verde") cVerde++;
+    else if (estado === "amarillo") cAmarillo++;
+    else if (estado === "rojo") cRojo++;
+    else cNegro++;
+
+    // Sidebar item
+    const item = document.createElement("div");
+    item.className = "punto-item";
+    const tiempo = tiempoTranscurrido(p.ultimo_evento);
+    item.innerHTML = `
+      <div class="punto-semaforo" style="background:${color}"></div>
+      <div class="punto-info">
+        <div class="punto-nombre">${p.nombre}</div>
+        <div class="punto-barrio">${p.barrio || "—"}</div>
+      </div>
+      <div class="punto-tiempo">${tiempo}</div>
+    `;
+    lista.appendChild(item);
+  });
+
+  document.getElementById("cnt-verde").textContent    = cVerde;
+  document.getElementById("cnt-amarillo").textContent = cAmarillo;
+  document.getElementById("cnt-rojo").textContent     = cRojo;
+  document.getElementById("cnt-negro").textContent    = cNegro;
+}
+
+function renderMoviles(moviles, puntosLatLng) {
+  layerMoviles.clearLayers();
+
+  moviles.forEach(m => {
+    const lat = parseFloat(m.lat);
+    const lng = parseFloat(m.lng);
+    if (isNaN(lat) || isNaN(lng)) return;
+
+    const initials = (m.device_name || "M").substring(0, 2).toUpperCase();
+    const icon = L.divIcon({
+      html: `<div class="movil-marker">${initials}</div>`,
+      className: "",
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+    });
+
+    const popup = `
+      <div class="popup-title">📱 ${m.device_name}</div>
+      <div class="popup-row"><span>Última posición</span><span class="popup-val">${tiempoTranscurrido(m.api_time)}</span></div>
+      <div class="popup-row"><span>Coordenadas</span><span class="popup-val">${lat.toFixed(5)}, ${lng.toFixed(5)}</span></div>
+    `;
+
+    L.marker([lat, lng], { icon })
+      .bindPopup(popup)
+      .addTo(layerMoviles);
+  });
+}
+
+// ─── ACTUALIZACIÓN ────────────────────────────────────────────────────────────
+
+// Cache para coordenadas de puntos (vienen solo en semaforo, no en CSV de semaforo)
+// El CSV de semaforo tiene: nombre,barrio,ventana_minutos,ultimo_evento,estado,generado
+// Las coordenadas están en la planilla — las cacheamos al cargar los puntos del mapa
+// Para este MVP usamos las coords hardcodeadas de los 3 puntos de Zorzales
+// y las extendemos con los datos del CSV de semáforo
+
+const COORDS_PUNTOS = {
+  "Nariño 2252":        [-34.874825, -56.051462],
+  "Acosta y Lara 7240": [-34.870389, -56.050135],
+  "Santander 2254":     [-34.873374, -56.050754],
+};
+
+async function actualizar() {
+  try {
+    const [csvSem, csvMov] = await Promise.all([
+      fetchCSV(CSV_SEMAFORO),
+      fetchCSV(CSV_MOVILES),
+    ]);
+
+    const puntos  = parseCSV(csvSem);
+    const moviles = parseCSV(csvMov);
+
+    // Renderizar sidebar
+    renderPuntos(puntos);
+
+    // Renderizar marcadores de puntos en el mapa
+    layerPuntos.clearLayers();
+    const uniquePuntos = {};
+    puntos.forEach(p => {
+      // Deduplicar por nombre — quedarse con el que tiene estado no-negro
+      if (!uniquePuntos[p.nombre] || uniquePuntos[p.nombre].estado === "negro") {
+        uniquePuntos[p.nombre] = p;
+      }
+    });
+
+    Object.values(uniquePuntos).forEach(p => {
+      const coords = COORDS_PUNTOS[p.nombre];
+      if (!coords) return;
+      const estado = (p.estado || "negro").toLowerCase();
+      const color = COLORES[estado] || COLORES.negro;
+
+      const icon = L.divIcon({
+        html: `<div class="punto-marker" style="background:${color};box-shadow:0 0 10px ${color}88"></div>`,
+        className: "",
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
+      });
+
+      const popup = `
+        <div class="popup-title">📍 ${p.nombre}</div>
+        <div class="popup-row"><span>Barrio</span><span class="popup-val">${p.barrio || "—"}</span></div>
+        <div class="popup-row"><span>Estado</span><span class="popup-val" style="color:${color}">${p.estado.toUpperCase()}</span></div>
+        <div class="popup-row"><span>Ventana</span><span class="popup-val">${p.ventana_minutos} min</span></div>
+        <div class="popup-row"><span>Última ronda</span><span class="popup-val">${tiempoTranscurrido(p.ultimo_evento)}</span></div>
+      `;
+
+      L.marker(coords, { icon })
+        .bindPopup(popup)
+        .addTo(layerPuntos);
+    });
+
+    // Renderizar móviles
+    renderMoviles(moviles);
+
+    // Timestamp
+    const ahora = new Date().toLocaleTimeString("es-UY", { hour: "2-digit", minute: "2-digit" });
+    document.getElementById("last-update").textContent = `Actualizado ${ahora}`;
+
+  } catch(e) {
+    console.error("Error actualizando:", e);
+  }
+}
+
+function initApp() {
+  initMap();
+  actualizar();
+  setInterval(actualizar, REFRESH_MS);
+}
+</script>
+</body>
+</html>
