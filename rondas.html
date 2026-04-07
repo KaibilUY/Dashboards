@@ -463,8 +463,8 @@
 // ─── CONFIGURACIÓN ────────────────────────────────────────────────────────────
 
 const PWD_HASH = "4f1f81565875bfb546ce204acb7953474faf941d36076fd4f9eeef4d08784de0"; // K@ibil2@26
-const CSV_SEMAFORO = "https://drive.google.com/uc?export=download&id=1_72lWUbaxgYSCAgsVsBK6zF7_aINCNO8";
-const CSV_MOVILES  = "https://drive.google.com/uc?export=download&id=1R_TBA992emV_mzR2XJEoBIeLYl5kEe0g";
+const CSV_SEMAFORO = "http://204.168.220.105:5001/semaforo";
+const CSV_MOVILES  = "http://204.168.220.105:5001/moviles";
 const REFRESH_MS   = 5 * 60 * 1000; // 5 minutos
 
 const COLORES = {
@@ -508,10 +508,8 @@ function parseCSV(text) {
 }
 
 async function fetchCSV(url) {
-  // Usar corsproxy para evitar bloqueo CORS de Drive
-  const proxy = "https://corsproxy.io/?" + encodeURIComponent(url);
   try {
-    const r = await fetch(proxy);
+    const r = await fetch(url);
     return await r.text();
   } catch(e) {
     console.error("Error fetching CSV:", e);
