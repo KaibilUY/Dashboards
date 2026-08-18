@@ -137,7 +137,7 @@ def descargar_desde_drive(carpeta_destino, max_archivos=MAX_DIAS):
         from google.auth.transport.requests import Request
         import pickle as pkl
 
-        SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+        SCOPES = ['https://www.googleapis.com/auth/drive']
         token_path  = os.path.join(os.path.dirname(__file__), 'token_drive.pkl')
         creds_path  = os.path.join(os.path.dirname(__file__), 'credentials_drive.json')
         creds = None
