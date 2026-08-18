@@ -150,8 +150,7 @@ def descargar_desde_drive(carpeta_destino, max_archivos=MAX_DIAS):
             from google.oauth2.credentials import Credentials as OAuthCreds
             creds = OAuthCreds(token=None, refresh_token=refresh_token,
                                token_uri='https://oauth2.googleapis.com/token',
-                               client_id=client_id, client_secret=client_secret,
-                               scopes=SCOPES)
+                               client_id=client_id, client_secret=client_secret)
             creds.refresh(Request())
         elif os.path.exists(token_path):
             with open(token_path, 'rb') as tk: creds = pkl.load(tk)
@@ -747,3 +746,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
