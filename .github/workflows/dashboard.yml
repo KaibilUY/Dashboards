@@ -2,7 +2,7 @@ name: Actualizar Dashboards
 
 on:
   schedule:
-    - cron: '0 10 * * 1-5'   # 07:00 Uruguay (UTC-3)
+    - cron: '0 10 * * 1-5'   # 07:00 Uruguay  (UTC-3)
     - cron: '0 12 * * 1-5'   # 09:00 Uruguay
     - cron: '0 14 * * 1-5'   # 11:00 Uruguay
   workflow_dispatch:           # También permite ejecutar manualmente
